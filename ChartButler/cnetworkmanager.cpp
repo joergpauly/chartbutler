@@ -250,7 +250,9 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
     while(true)
     {
         QString lFullName;
-        lFldDef = getTextBetween(&ldlData,&QString("&ICAO="),&QString("' target='"),lLastPos);
+        QString* lStart = new QString("&ICAO=");
+        QString* lEnd = new QString("' target='");
+        lFldDef = getTextBetween(&ldlData,lStart, lEnd,lLastPos);
         CDatabaseManager::s_Field *lFld = new CDatabaseManager::s_Field();
         if(lFldDef->pos < lLastPos)
         {
@@ -258,9 +260,13 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
         }
         lFullName = lFldDef->text;
         lFld->IACO = lFldDef->text;
-        lFldDef = getTextBetween(&ldlData,&QString("left\">"),&QString("</td>"),lFldDef->pos);
+        lStart = new QString("left\">");
+        lEnd = new QString("</td>");
+        lFldDef = getTextBetween(&ldlData, lStart, lEnd, lFldDef->pos);
+        delete lStart;
+        delete lEnd;
         lFullName.append(" - ");
-        lFullName.append(lFldDef->text);
+        lFullName.append(lFldDef->text);        
 
         CDatabaseManager::s_Field *lFieldCheck = new CDatabaseManager::s_Field();
         if(ldbman->GetField(lFld->IACO,lFieldCheck))
