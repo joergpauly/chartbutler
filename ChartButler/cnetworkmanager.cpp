@@ -37,7 +37,7 @@ CNetworkManager::CNetworkManager(QObject *parent) :
     // Save the parent.
     m_parent = parent;
     // Connect the Request's finished()-signal to our slot
-    connect(&m_nam,SIGNAL(finished(QNetworkReply*)),this,SLOT(dlFinished(QNetworkReply*)));
+    connect(&m_nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(dlFinished(QNetworkReply*)));
 
     // Get a settings object and extract login data
     QSettings l_opts(gCOMPANY, gAPP);
@@ -83,7 +83,7 @@ void CNetworkManager::downloadData(QUrl* pUrl)
     // Set URL in request
     m_request.setUrl(*pUrl);
     // Send request
-    m_nam.get(m_request);
+    m_nam.get(m_request);    
 }
 
 void CNetworkManager::getSID()
@@ -95,7 +95,7 @@ void CNetworkManager::getSID()
     lLogin.append("&btnSubmitLogin=Login");
     QUrl lUrl;
     lUrl.setUrl(LOGINURL);
-    m_request.setUrl(lUrl);
+    m_request.setUrl(lUrl);    
     m_nam.post(m_request,lLogin.toAscii());
 }
 
@@ -104,6 +104,14 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
     m_dlData = pReply->readAll();
     QString lcontent = pReply->header(QNetworkRequest::ContentTypeHeader).toString();
     QString ldlData(m_dlData);
+
+ /*   if(ldlData.contains("REGISTRIEREN"))
+    {
+        getSID();
+        return;
+    }
+*/
+
     if(ldlData.contains("Eingeloggt"))
     {
         extractSID();

@@ -86,8 +86,6 @@ private:
     void storeChartFile(QByteArray* pStream, QString* pFilename);
     void storeNewField(QString* pICAO);
 
-signals:
-    void dlDataReady();
 
 public slots:
     void dlFinished(QNetworkReply* pReply);
