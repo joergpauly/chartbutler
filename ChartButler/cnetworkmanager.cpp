@@ -95,7 +95,8 @@ void CNetworkManager::getSID()
     lLogin.append("&btnSubmitLogin=Login");
     QUrl lUrl;
     lUrl.setUrl(LOGINURL);
-    m_request.setUrl(lUrl);    
+    m_request.setUrl(lUrl);
+    m_request.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
     m_nam.post(m_request,lLogin.toAscii());
 }
 
@@ -104,13 +105,6 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
     m_dlData = pReply->readAll();
     QString lcontent = pReply->header(QNetworkRequest::ContentTypeHeader).toString();
     QString ldlData(m_dlData);
-
- /*   if(ldlData.contains("REGISTRIEREN"))
-    {
-        getSID();
-        return;
-    }
-*/
 
     if(ldlData.contains("Eingeloggt"))
     {
@@ -162,8 +156,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             lCFPath.append(lFileName);
             lChartFile->setFileName(lCFPath);
             lChartFile->open(QFile::WriteOnly);
-            QDataStream out(lChartFile);
-            out << ldlData;
+            lChartFile->write(m_dlData);
             lChartFile->flush();
             lChartFile->close();
         }
