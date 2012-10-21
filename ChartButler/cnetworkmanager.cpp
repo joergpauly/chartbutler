@@ -56,6 +56,8 @@ void CNetworkManager::updateCharts()
        Check if change is younger than stored chart
        Download chart, if necessary */
     m_action = ACT_UPD;
+    // Clean Up list of new Charts...
+    m_newCharts = new QList<QString>();
     QString lsUrl(AMENDURL);
     QString lcmp("SID=");
     int lcnt = lsUrl.indexOf(lcmp)+4;
@@ -71,6 +73,8 @@ void CNetworkManager::getChart(QString* pICAO)
        Download the Charts
        Store chart's data in db */
     m_action = ACT_NEW;
+    // Clean up list of new charts
+    m_newCharts = new QList<QString>();
     m_ICAO = *pICAO;
     QString lsUrl(ICAOURL);
     lsUrl.append(pICAO);
@@ -317,7 +321,7 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
         }
         else
         {            
-            lState = "\t\t...übersprungen";
+            lState = "...übersprungen";
             status->appendList(&lState,1,lLastRow);
         }
         lFld->Name = lFldDef->text;
