@@ -41,6 +41,7 @@
 #include <QList>
 #include <QDate>
 #include "cdatabasemanager.h"
+#include "cdownloadstatus.h"
 
 #define ACT_NEW 0
 #define ACT_UPD 1
@@ -53,6 +54,7 @@ public:
     void updateCharts();
     void getChart(QString* pICAO);
 
+
 private:
     QObject* m_parent;
     QString m_uid;
@@ -63,10 +65,13 @@ private:
     QString m_FieldDir;
     QDate   m_lastAmmended;
     int     m_action;
+    int     m_FID;
     QByteArray m_dlData;
     QNetworkAccessManager m_nam;
     QNetworkRequest m_request;
     QList<QString> *m_fieldList;
+    QList<QString> *m_newCharts;
+    CDownloadStatus* m_dlState;
 
     struct txtPos
     {
@@ -75,7 +80,7 @@ private:
     };
 
     void getSID();
-    void downloadData(QUrl* pUrl);
+    void downloadData(QUrl* pUrl, bool pShowState = false);
     void extractSID();
     void getNewAirfield(QString* pICAO, QList<QString>* pLinkList);
     QList<CDatabaseManager::s_Field>* GetAmendedFieldsList();
@@ -83,12 +88,11 @@ private:
     txtPos *getTextAfter(QString* pSource, QString* pStart, int pLen, int pStartPos);
     QStringList* getLinkList(QString* pStream);
     void getFieldName(QString* pStream);
-    void storeChartFile(QByteArray* pStream, QString* pFilename);
-    void storeNewField(QString* pICAO);
-
+    void storeChartInDb(QString *pFileName, QString *pPath);
 
 public slots:
     void dlFinished(QNetworkReply* pReply);
+    void dlProgress(qint64 pRcvd, qint64 pTotal);
 
 
 

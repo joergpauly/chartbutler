@@ -15,7 +15,8 @@ SOURCES += main.cpp\
     cdatabasemanager.cpp \
     coptions.cpp \
     cnetworkmanager.cpp \
-    cstatus.cpp
+    cstatus.cpp \
+    cdownloadstatus.cpp
 
 
 HEADERS  += cmainwindow.h \
@@ -23,12 +24,14 @@ HEADERS  += cmainwindow.h \
     coptions.h \
     globals.h \
     cnetworkmanager.h \
-    cstatus.h
+    cstatus.h \
+    cdownloadstatus.h
 
 
 FORMS    += cmainwindow.ui \
     coptions.ui \
-    cstatus.ui
+    cstatus.ui \
+    cdownloadstatus.ui
 
 
 

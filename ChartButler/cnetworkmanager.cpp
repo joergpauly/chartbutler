@@ -36,6 +36,7 @@ CNetworkManager::CNetworkManager(QObject *parent) :
 {
     // Save the parent.
     m_parent = parent;
+    m_dlState = new CDownloadStatus();
     // Connect the Request's finished()-signal to our slot
     connect(&m_nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(dlFinished(QNetworkReply*)));
 
@@ -54,6 +55,7 @@ void CNetworkManager::updateCharts()
        Check if some of the changed charts are in db
        Check if change is younger than stored chart
        Download chart, if necessary */
+    m_action = ACT_UPD;
     QString lsUrl(AMENDURL);
     QString lcmp("SID=");
     int lcnt = lsUrl.indexOf(lcmp)+4;
@@ -78,12 +80,23 @@ void CNetworkManager::getChart(QString* pICAO)
     downloadData(lUrl);
 }
 
-void CNetworkManager::downloadData(QUrl* pUrl)
+void CNetworkManager::downloadData(QUrl* pUrl, bool pShowState)
 {
     // Set URL in request
     m_request.setUrl(*pUrl);
     // Send request
-    m_nam.get(m_request);    
+    QNetworkReply* lReply = m_nam.get(m_request);
+    connect(lReply, SIGNAL(downloadProgress(qint64,qint64)), SLOT(dlProgress(qint64,qint64)));
+    QString lAttachment(lReply->rawHeader("Content-Disposition"));
+    QString lLimiter("\"");
+    QString lFileName(getTextBetween(&lAttachment, &lLimiter, &lLimiter, 0)->text);
+    QString lStatus("Lade Datei");
+    m_dlState->setStatusText(&lStatus);
+    m_dlState->setFileName(&lFileName);
+    if(pShowState)
+    {
+        m_dlState->show();
+    }
 }
 
 void CNetworkManager::getSID()
@@ -148,6 +161,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             QString lAttachment(pReply->rawHeader("Content-Disposition"));
             QString lLimiter("\"");
             QString lFileName(getTextBetween(&lAttachment, &lLimiter, &lLimiter, 0)->text);
+            m_dlState->setFileName(&lFileName);
             QString lCFPath(m_FieldDir);
             if(lCFPath.right(1) != "/")
             {
@@ -159,10 +173,15 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             lChartFile->write(m_dlData);
             lChartFile->flush();
             lChartFile->close();
-        }
-
+            storeChartInDb(&lFileName, &lCFPath);
+            m_newCharts->append(lCFPath);
+        }        
     }
+}
 
+void CNetworkManager::dlProgress(qint64 pRcvd, qint64 pTotal)
+{
+    m_dlState->setActualProgress(pRcvd, pTotal);
 }
 
 void CNetworkManager::extractSID()
@@ -211,6 +230,7 @@ void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
     QString lFullName(m_ICAO);
     lFullName.append(" - ");
     lFullName.append(m_FieldName);
+
     QSettings* settings = new QSettings(gCOMPANY, gAPP);
     QString CPath(settings->value("ChartPath").toString());
     QDir* lChartDir = new QDir(CPath);
@@ -220,11 +240,13 @@ void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
     lChartDir = new QDir(CPath);
     CPath.append("/");
     m_FieldDir = CPath;
+    m_FID = ldbman->AddField(m_ICAO, m_FieldName, m_FieldDir);
+    lparent->SetupTree();
     int i;
     for(i = 0; i < pLinkList->count(); i++)
     {
         QUrl lUrl(pLinkList->at(i));
-        downloadData(&lUrl);
+        downloadData(&lUrl, true);
     }
 }
 
@@ -270,38 +292,33 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
         lFullName.append(lFldDef->text);        
 
         CDatabaseManager::s_Field *lFieldCheck = new CDatabaseManager::s_Field();
+        QString lState;
+        int lLastRow;
         if(ldbman->GetField(lFld->IACO,lFieldCheck))
         {
-            if(lFullName.length() < 15)
-            {
-                lFullName.append("\t");
-            }
-            lFullName.append("\t\t...im Abo; wird geprüft.");
-            status->appendList(&lFullName);
+            lLastRow = status->appendList(&lFullName, 0);
+            lState = "...im Abo; wird geprüft.";
+            status->appendList(&lState, 1, lLastRow);
             if(ldbman->BrowseCharts(lFieldCheck->ID))
             {
                 CDatabaseManager::s_Chart *lchart = ldbman->GetActualChart();
                 if(lchart->Date < m_lastAmmended)
                 {
-                    lFullName = "\t\t\t...wird erneuert.";
-                    status->appendList(&lFullName);
+                    lState = "...wird erneuert!";
+                    status->appendList(&lState,1);
                     // TODO: Charts downloaden und DB nachpflegen...
                 }
                 else
                 {
-                    lFullName = "\t\t\t...ist aktuell!";
-                    status->appendList((&lFullName));
+                    lState = "...ist aktuell!";
+                    status->appendList(&lState,1);
                 }
             }
         }
         else
-        {
-            if(lFullName.length() < 15)
-            {
-                lFullName.append("\t");
-            }
-            lFullName.append("\t\t...übersprungen");
-            status->appendList(&lFullName);
+        {            
+            lState = "\t\t...übersprungen";
+            status->appendList(&lState,1,lLastRow);
         }
         lFld->Name = lFldDef->text;
         lFldList->append(*lFld);
@@ -391,12 +408,12 @@ void CNetworkManager::getFieldName(QString *pStream)
     }
 }
 
-void CNetworkManager::storeChartFile(QByteArray* pStream, QString* pFilename)
+void CNetworkManager::storeChartInDb(QString* pFileName, QString* pPath)
 {
-
+    CMainWindow* lparent = (CMainWindow*)m_parent;
+    CDatabaseManager* ldbman = lparent->GetDBman();
+    ldbman->AddChart(m_FID, *pFileName, *pPath, QDate::currentDate());
+    lparent->SetupTree();
 }
 
-void CNetworkManager::storeNewField(QString *pICAO)
-{
 
-}

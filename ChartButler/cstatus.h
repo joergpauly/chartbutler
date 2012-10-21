@@ -24,13 +24,14 @@
 
 #include "ui_cstatus.h"
 
+
 class CStatus : public QDialog, private Ui::CStatus
 {
     Q_OBJECT
 
 public:
     explicit CStatus(QWidget *parent = 0);
-    void appendList(QString* pText);
+    int appendList(QString* pText, int pLR, int pRow = -1);
     void clearList();
     void setHeader(QString* pText);
     Ui::CStatus *ui;

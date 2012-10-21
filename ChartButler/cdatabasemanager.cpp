@@ -128,9 +128,9 @@ int CDatabaseManager::AddField(QString p_icao, QString p_name, QString p_path)
 
 bool CDatabaseManager::BrowseFields()
 {
-    // Fill the query with all the records and point ton the 1st one
+    // Fill the query with all the records and point on the 1st one
     qryFields = new QSqlQuery(m_db);
-    qryFields->exec("SELECT ID, ICAO, Name, Path FROM Fields");
+    qryFields->exec("SELECT ID, ICAO, Name, Path FROM Fields order by ICAO");
     qryFields->first();
     return true;
 }
@@ -184,7 +184,7 @@ void CDatabaseManager::AddChart(int p_FID, QString p_name, QString p_path, QDate
 bool CDatabaseManager::BrowseCharts(int FID)
 {
     qryCharts = new QSqlQuery(m_db);
-    qryCharts->prepare("SELECT * FROM Charts WHERE FID = :FID");
+    qryCharts->prepare("SELECT * FROM Charts WHERE FID = :FID order by CName");
     qryCharts->bindValue(":FID", FID);
     qryCharts->exec();
     qryCharts->first();
