@@ -34,8 +34,10 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QInputDialog>
-#include <QDesktopServices>
+#include <QProcess>
 #include <QTreeWidgetItem>
+#include <QUrl>
+#include <QDesktopServices>
 
 // Projekt-Header
 #include "cnetworkmanager.h"
@@ -55,6 +57,7 @@ private:
     CDatabaseManager *mdb;
     CNetworkManager *mnet;
     COptions *mopt;
+    QProcess* m_reader;
 
 // Public Member
 public:

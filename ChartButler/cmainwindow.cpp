@@ -34,6 +34,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->setupUi(this);
     mdb = new CDatabaseManager(this);
     mnet = new CNetworkManager(this);
+    mopt = new COptions(this);
     SetupTree();
 }
 
@@ -42,6 +43,7 @@ CMainWindow::~CMainWindow()
     delete ui;
     delete mdb;
     delete mnet;
+    delete mopt;
 }
 
 void CMainWindow::on_cmdClose_clicked()
@@ -97,8 +99,7 @@ void CMainWindow::on_cmdAdd_clicked()
 }
 
 void CMainWindow::on_cmdOptions_clicked()
-{
-    mopt = new COptions(this);
+{    
     mopt->exec();
     mnet = new CNetworkManager(this);
 }
@@ -153,11 +154,17 @@ void CMainWindow::on_cmdUpdate_clicked()
 void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
 
-    QString lFname("file://");
-    lFname.append(item->data(0, Qt::UserRole).toString());
+    QString lFname(item->data(0, Qt::UserRole).toString());
     if(lFname.right(4).toLower() == ".pdf")
     {
-        QUrl lUrl(lFname);
-        QDesktopServices::openUrl(lUrl);
+        #ifdef Q_WS_WIN
+            QStringList lArg(lFname);
+            m_reader = new QProcess();
+            QString pdfRead(mopt->pdfExe());
+            m_reader->start(pdfRead, lArg);
+        #else
+            QUrl lUrl(lFName);
+            QDesktopServices::openUrl(lUrl);
+        #endif
     }
 }
