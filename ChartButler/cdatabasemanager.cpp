@@ -212,6 +212,37 @@ bool CDatabaseManager::PrevChart()
     return qryCharts->previous();
 }
 
+void CDatabaseManager::RemoveField(QString *pICAO)
+{
+    //First remove the directory
+    s_Field* lfld = new s_Field();
+    GetField(*pICAO, lfld);
+    QDir ldir(lfld->Path);
+    ldir.cd(lfld->Path);
+    QStringList lFiles;
+    lFiles = ldir.entryList();
+    QString fileName;
+    foreach(fileName, lFiles)
+    {
+        if(fileName.left(1) != ".")
+        {
+            QFile::remove(fileName);
+        }
+    }
+    ldir.rmdir(lfld->Path);
+
+    //Now remove chart entries
+    qryCharts->prepare("DELETE FROM Charts WHERE FID = :FID");
+    qryCharts->bindValue(":FID", lfld->ID);
+    qryCharts->exec();
+
+    //Finally remove the field entry
+    qryFields->prepare("DELETE FROM Fields WHERE ICAO = :ICAO");
+    qryFields->bindValue(":ICAO",*pICAO);
+    qryFields->exec();
+
+}
+
 bool CDatabaseManager::FirstField()
 {
     return qryCharts->first();

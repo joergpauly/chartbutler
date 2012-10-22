@@ -34,7 +34,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->setupUi(this);
     mdb = new CDatabaseManager(this);
     mnet = new CNetworkManager(this);
-    mopt = new COptions(this);
+    mopt = new COptions(this);    
+    setupMenu();
     SetupTree();
 }
 
@@ -44,6 +45,23 @@ CMainWindow::~CMainWindow()
     delete mdb;
     delete mnet;
     delete mopt;
+}
+
+void CMainWindow::setupMenu()
+{
+    m_contextMenu = new QMenu(this);
+    QList<QAction*> lActions;
+    m_actRemove = new QAction("Platz entfernen", this);
+    lActions.append(m_actRemove);
+    m_actShowInReader = new QAction("Karte anzeigen", this);
+    lActions.append(m_actShowInReader);
+    m_actUpdate = new QAction("Aktualisieren",this);
+    lActions.append(m_actUpdate);
+    m_contextMenu->addActions(lActions);
+
+    connect(m_actRemove,SIGNAL(triggered()),this,SLOT(on_actRemove()));
+    connect(m_actShowInReader,SIGNAL(triggered()),this,SLOT(on_actShow()));
+    connect(m_actUpdate,SIGNAL(triggered()),this,SLOT(on_actUpdate()));
 }
 
 void CMainWindow::on_cmdClose_clicked()
@@ -76,6 +94,12 @@ void CMainWindow::closeEvent(QCloseEvent *e)
     // Aufräumen
     delete msg;
 }
+
+void CMainWindow::contextMenuEvent(QContextMenuEvent *e)
+{
+    m_contextMenu->exec(e->globalPos());
+}
+
 
 void CMainWindow::on_cmdAdd_clicked()
 {
@@ -159,12 +183,80 @@ void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int colu
     {
         #ifdef Q_WS_WIN
             QStringList lArg(lFname);
-            m_reader = new QProcess();
+            QProcess lReader;
             QString pdfRead(mopt->pdfExe());
-            m_reader->start(pdfRead, lArg);
-        #else
-            QUrl lUrl(lFName);
+            lReader.start(pdfRead, lArg);
+        #endif
+
+        #ifdef Q_WS_X11
+            lFname.insert(0, "file://");
+            QUrl lUrl(lFname);
             QDesktopServices::openUrl(lUrl);
         #endif
     }
+}
+
+void CMainWindow::on_actRemove()
+{
+    QMessageBox *lBox = new QMessageBox(this);
+    lBox->setWindowTitle("Platz löschen");
+    CDatabaseManager::s_Field* lfld = new CDatabaseManager::s_Field();
+    QString lICAO(m_clickedItem->text(0).left(4).toUpper());
+    mdb->GetField(lICAO,lfld);
+    QString msg("Wollen Sie den Flugplatz\n");
+    msg.append(lfld->Name);
+    msg.append("\nwirklich löschen?");
+    lBox->setText(msg);
+    lBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    lBox->setButtonText(QMessageBox::Yes,"Ja, flieg ich eh nicht mehr hin...");
+    lBox->setButtonText(QMessageBox::No, "Um Himmels Willen, NEIN!!!");
+    lBox->setDefaultButton(QMessageBox::No);
+    if(lBox->exec() == QMessageBox::Yes)
+    {
+        ui->trvCharts->setCurrentItem(0);
+        mdb->RemoveField(&lfld->IACO);
+        SetupTree();
+    }
+}
+
+void CMainWindow::on_actShow()
+{
+    on_trvCharts_itemDoubleClicked(m_clickedItem, 0);
+}
+
+void CMainWindow::on_actUpdate()
+{
+}
+
+void CMainWindow::on_trvCharts_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+    if(current == 0)
+    {
+        return;
+    }
+
+    previous = 0;
+    m_clickedItem = current;
+    QString lPath(current->data(0, Qt::UserRole).toString());
+    if(lPath.right(4).toLower() == ".pdf" )
+    {
+        CDatabaseManager::s_Field lfld;
+        mdb->GetField(lPath.left(4),&lfld);
+        m_contextMenu->setTitle(lfld.Name);
+        m_actRemove->setEnabled(false);
+        m_actShowInReader->setEnabled(true);
+        m_actUpdate->setEnabled(false);
+    }
+    else
+    {
+        m_contextMenu->setTitle(current->text(0));
+        m_actRemove->setEnabled(true);
+        m_actShowInReader->setEnabled(false);
+        m_actUpdate->setEnabled(true);
+    }
+}
+
+void CMainWindow::on_trvCharts_itemChanged(QTreeWidgetItem *item, int column)
+{
+
 }

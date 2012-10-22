@@ -34,6 +34,7 @@
 #include <QObject>
 #include <QMessageBox>
 #include <QFile>
+#include <QDir>
 #include <qsql.h>
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -98,6 +99,7 @@ public:
     s_Chart* GetActualChart();
     bool NextChart();
     bool PrevChart();
+    void RemoveField(QString* pICAO);
 
 
 

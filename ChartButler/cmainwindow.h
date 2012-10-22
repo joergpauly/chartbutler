@@ -32,19 +32,30 @@
 // System-Header
 #include <QMainWindow>
 #include <QCloseEvent>
+#include <QMouseEvent>
 #include <QMessageBox>
 #include <QInputDialog>
-#include <QProcess>
 #include <QTreeWidgetItem>
+#include <QMenu>
+#include <QAction>
+
+
+#ifdef Q_WS_WIN
+#include <QProcess>
+#endif
+
+#ifdef Q_WS_X11
 #include <QUrl>
 #include <QDesktopServices>
+#endif
 
 // Projekt-Header
 #include "cnetworkmanager.h"
 #include "cdatabasemanager.h"
 #include "coptions.h"
 
-namespace Ui {
+namespace Ui
+{
     class CMainWindow;
 }
 
@@ -56,31 +67,44 @@ class CMainWindow : public QMainWindow
 private:
     CDatabaseManager *mdb;
     CNetworkManager *mnet;
-    COptions *mopt;
-    QProcess* m_reader;
+    COptions *mopt;    
+    QMouseEvent* m_lastMouseEvent;
+    QMenu *m_contextMenu;
+    QAction *m_actRemove;
+    QAction *m_actUpdate;
+    QAction *m_actShowInReader;
+    QTreeWidgetItem* m_clickedItem;
+
 
 // Public Member
 public:
     CDatabaseManager *GetDBman();
     void SetupTree();
-
-public:
     explicit CMainWindow(QWidget *parent = 0);
     ~CMainWindow();
 
+// Private Member
+
+private:
+    void setupMenu();
 
 private slots:
     void on_cmdClose_clicked();
     void on_cmdAdd_clicked();
     void on_cmdOptions_clicked();
-
     void on_cmdUpdate_clicked();
-
     void on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int column);
+    void on_actRemove();
+    void on_actShow();
+    void on_actUpdate();
+    void on_trvCharts_itemChanged(QTreeWidgetItem *item, int column);
+
+    void on_trvCharts_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
 private:
     Ui::CMainWindow *ui;
-    void closeEvent(QCloseEvent *e);
+    void closeEvent(QCloseEvent *e);    
+    void contextMenuEvent(QContextMenuEvent* e);
 
 };
 
