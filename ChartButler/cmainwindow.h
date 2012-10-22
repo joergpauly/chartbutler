@@ -34,6 +34,8 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QDesktopServices>
+#include <QTreeWidgetItem>
 
 // Projekt-Header
 #include "cnetworkmanager.h"
@@ -70,6 +72,8 @@ private slots:
     void on_cmdOptions_clicked();
 
     void on_cmdUpdate_clicked();
+
+    void on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
 private:
     Ui::CMainWindow *ui;

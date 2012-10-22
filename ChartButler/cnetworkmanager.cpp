@@ -36,10 +36,11 @@ CNetworkManager::CNetworkManager(QObject *parent) :
 {
     // Save the parent.
     m_parent = parent;
-    m_dlState = new CDownloadStatus();
+
     // Connect the Request's finished()-signal to our slot
     connect(&m_nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(dlFinished(QNetworkReply*)));
 
+    m_dlProgress = new QProgressDialog();
     // Get a settings object and extract login data
     QSettings l_opts(gCOMPANY, gAPP);
     m_uid = l_opts.value("UID").toString();
@@ -91,15 +92,14 @@ void CNetworkManager::downloadData(QUrl* pUrl, bool pShowState)
     // Send request
     QNetworkReply* lReply = m_nam.get(m_request);
     connect(lReply, SIGNAL(downloadProgress(qint64,qint64)), SLOT(dlProgress(qint64,qint64)));
-    QString lAttachment(lReply->rawHeader("Content-Disposition"));
-    QString lLimiter("\"");
-    QString lFileName(getTextBetween(&lAttachment, &lLimiter, &lLimiter, 0)->text);
-    QString lStatus("Lade Datei");
-    m_dlState->setStatusText(&lStatus);
-    m_dlState->setFileName(&lFileName);
+
     if(pShowState)
     {
-        m_dlState->show();
+        m_dlProgress = new QProgressDialog();
+        m_dlProgress->setLabelText("Lade Datei");
+        m_dlProgress->setValue(0);
+        m_dlProgress->setAutoClose(true);
+        m_dlProgress->exec();
     }
 }
 
@@ -164,8 +164,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             QFile* lChartFile = new QFile();
             QString lAttachment(pReply->rawHeader("Content-Disposition"));
             QString lLimiter("\"");
-            QString lFileName(getTextBetween(&lAttachment, &lLimiter, &lLimiter, 0)->text);
-            m_dlState->setFileName(&lFileName);
+            QString lFileName(getTextBetween(&lAttachment, &lLimiter, &lLimiter, 0)->text);            
             QString lCFPath(m_FieldDir);
             if(lCFPath.right(1) != "/")
             {
@@ -185,7 +184,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
 
 void CNetworkManager::dlProgress(qint64 pRcvd, qint64 pTotal)
 {
-    m_dlState->setActualProgress(pRcvd, pTotal);
+    m_dlProgress->setValue(pRcvd * 100 / pTotal);
 }
 
 void CNetworkManager::extractSID()

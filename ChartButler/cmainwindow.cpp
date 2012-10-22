@@ -149,3 +149,15 @@ void CMainWindow::on_cmdUpdate_clicked()
 {
     mnet->updateCharts();
 }
+
+void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+
+    QString lFname("file://");
+    lFname.append(item->data(0, Qt::UserRole).toString());
+    if(lFname.right(4).toLower() == ".pdf")
+    {
+        QUrl lUrl(lFname);
+        QDesktopServices::openUrl(lUrl);
+    }
+}

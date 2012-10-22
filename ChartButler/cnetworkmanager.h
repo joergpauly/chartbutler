@@ -40,8 +40,8 @@
 #include <QUrl>
 #include <QList>
 #include <QDate>
+#include <QProgressDialog>
 #include "cdatabasemanager.h"
-#include "cdownloadstatus.h"
 
 #define ACT_NEW 0
 #define ACT_UPD 1
@@ -71,7 +71,7 @@ private:
     QNetworkRequest m_request;
     QList<QString> *m_fieldList;
     QList<QString> *m_newCharts;
-    CDownloadStatus* m_dlState;
+    QProgressDialog* m_dlProgress;
 
     struct txtPos
     {
