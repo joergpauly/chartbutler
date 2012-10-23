@@ -224,11 +224,12 @@ void CDatabaseManager::RemoveField(QString *pICAO)
     QString fileName;
     foreach(fileName, lFiles)
     {
-        if(fileName.left(1) != ".")
-        {
-            QFile::remove(fileName);
-        }
+        QString fn(lfld->Path);
+        fn.append("/");
+        fn.append(fileName);
+        QFile::remove(fn);
     }
+    ldir.cdUp();
     ldir.rmdir(lfld->Path);
 
     //Now remove chart entries
