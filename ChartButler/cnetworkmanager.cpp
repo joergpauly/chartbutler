@@ -198,6 +198,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
 void CNetworkManager::dlProgress(qint64 pRcvd, qint64 pTotal)
 {
     m_dlProgress->setValue(pRcvd * 100 / pTotal);
+    m_dlProgress->setAutoClose(true);
 }
 
 void CNetworkManager::extractSID()

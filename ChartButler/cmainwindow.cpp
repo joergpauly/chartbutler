@@ -185,7 +185,7 @@ void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int colu
             QStringList lArg(lFname);
             QProcess lReader;
             QString pdfRead(mopt->pdfExe());
-            lReader.start(pdfRead, lArg);
+            lReader.startDetached(pdfRead, lArg);
         #endif
 
         #ifdef Q_WS_X11
