@@ -67,6 +67,19 @@ void CNetworkManager::updateCharts()
     downloadData(&lUrl);
 }
 
+void CNetworkManager::updateField(QString *pICAO)
+{
+    m_action = ACT_UPD;
+    m_newCharts = new QList<QString>();
+    m_ICAO = *pICAO;
+    QString lsUrl(ICAOURL);
+    lsUrl.append(pICAO);
+    lsUrl.append("&SID=");
+    lsUrl.append(m_sid);
+    QUrl* lUrl = new QUrl(lsUrl);
+    downloadData(lUrl);
+}
+
 void CNetworkManager::getChart(QString* pICAO)
 {
     /* Check if there are charts for the field

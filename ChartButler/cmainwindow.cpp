@@ -226,6 +226,9 @@ void CMainWindow::on_actShow()
 
 void CMainWindow::on_actUpdate()
 {
+    // TODO: Fertig schreiben!!!
+
+    //mnet->getChart(&icao);
 }
 
 void CMainWindow::on_trvCharts_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)

@@ -52,6 +52,7 @@ class CNetworkManager : public QObject
 public:
     explicit CNetworkManager(QObject *parent = 0);
     void updateCharts();
+    void updateField(QString* pICAO);
     void getChart(QString* pICAO);
 
 
