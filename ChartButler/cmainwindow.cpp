@@ -226,9 +226,13 @@ void CMainWindow::on_actShow()
 
 void CMainWindow::on_actUpdate()
 {
-    // TODO: Fertig schreiben!!!
-
-    //mnet->getChart(&icao);
+    CDatabaseManager::s_Field* lfld = new CDatabaseManager::s_Field();
+    QString lICAO(m_clickedItem->text(0).left(4).toUpper());
+    mdb->GetField(lICAO,lfld);
+    ui->trvCharts->setCurrentItem(0);
+    mdb->RemoveField(&lfld->IACO);
+    mnet->getChart(&lICAO);
+    SetupTree();
 }
 
 void CMainWindow::on_trvCharts_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
