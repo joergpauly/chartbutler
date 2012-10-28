@@ -31,7 +31,7 @@ class CStatus : public QDialog, private Ui::CStatus
 
 public:
     explicit CStatus(QWidget *parent = 0);
-    int appendList(QString* pText, int pLR, int pRow = -1);
+    void appendList(QTreeWidgetItem* pItem);
     void clearList();
     void setHeader(QString* pText);
     Ui::CStatus *ui;

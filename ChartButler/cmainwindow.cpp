@@ -170,6 +170,17 @@ void CMainWindow::SetupTree()
     ui->trvCharts->setHeaderLabels(lheaders);
 }
 
+void CMainWindow::updateField(QString *pICAO)
+{
+    CDatabaseManager::s_Field* lfld = new CDatabaseManager::s_Field();
+    QString lICAO(*pICAO);
+    mdb->GetField(lICAO,lfld);
+    ui->trvCharts->setCurrentItem(0);
+    mdb->RemoveField(&lfld->IACO);
+    mnet->getChart(&lICAO);
+    SetupTree();
+}
+
 void CMainWindow::on_cmdUpdate_clicked()
 {
     mnet->updateCharts();
@@ -266,4 +277,11 @@ void CMainWindow::on_trvCharts_currentItemChanged(QTreeWidgetItem *current, QTre
 void CMainWindow::on_trvCharts_itemChanged(QTreeWidgetItem *item, int column)
 {
 
+}
+
+void CMainWindow::on_cmdHelpInfo_clicked()
+{
+    CHelp *help = new CHelp(this);
+    help->exec();
+    delete help;
 }

@@ -16,7 +16,8 @@ SOURCES += main.cpp\
     coptions.cpp \
     cnetworkmanager.cpp \
     cstatus.cpp \
-    cdownloadstatus.cpp
+    cdownloadstatus.cpp \
+    chelp.cpp
 
 
 HEADERS  += cmainwindow.h \
@@ -25,13 +26,15 @@ HEADERS  += cmainwindow.h \
     globals.h \
     cnetworkmanager.h \
     cstatus.h \
-    cdownloadstatus.h
+    cdownloadstatus.h \
+    chelp.h
 
 
 FORMS    += cmainwindow.ui \
     coptions.ui \
     cstatus.ui \
-    cdownloadstatus.ui
+    cdownloadstatus.ui \
+    chelp.ui
 
 
 

@@ -54,7 +54,7 @@ void CStatus::clearList()
     ui->tblStatus->clear();
 }
 
-int CStatus::appendList(QString* pText, int pLR, int pRow)
-{
-
+void CStatus::appendList(QTreeWidgetItem* pItem)
+{    
+    ui->tblStatus->addTopLevelItem(pItem);
 }

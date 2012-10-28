@@ -53,6 +53,7 @@
 #include "cnetworkmanager.h"
 #include "cdatabasemanager.h"
 #include "coptions.h"
+#include "chelp.h"
 
 namespace Ui
 {
@@ -80,6 +81,7 @@ private:
 public:
     CDatabaseManager *GetDBman();
     void SetupTree();
+    void updateField(QString* pICAO);
     explicit CMainWindow(QWidget *parent = 0);
     ~CMainWindow();
 
@@ -100,6 +102,8 @@ private slots:
     void on_trvCharts_itemChanged(QTreeWidgetItem *item, int column);
 
     void on_trvCharts_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+    void on_cmdHelpInfo_clicked();
 
 private:
     Ui::CMainWindow *ui;

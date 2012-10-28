@@ -36,11 +36,10 @@ CNetworkManager::CNetworkManager(QObject *parent) :
 {
     // Save the parent.
     m_parent = parent;
-
+    m_dlProgress = new QProgressDialog();
     // Connect the Request's finished()-signal to our slot
     connect(&m_nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(dlFinished(QNetworkReply*)));
 
-    m_dlProgress = new QProgressDialog();
     // Get a settings object and extract login data
     QSettings l_opts(gCOMPANY, gAPP);
     m_uid = l_opts.value("UID").toString();
@@ -109,6 +108,7 @@ void CNetworkManager::downloadData(QUrl* pUrl, bool pShowState)
     if(pShowState)
     {
         m_dlProgress = new QProgressDialog();
+        m_dlProgress->setCancelButton(0);
         m_dlProgress->setLabelText("Lade Datei");
         m_dlProgress->setValue(0);
         m_dlProgress->setAutoClose(true);
@@ -197,7 +197,11 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
 
 void CNetworkManager::dlProgress(qint64 pRcvd, qint64 pTotal)
 {
-    m_dlProgress->setValue(pRcvd * 100 / pTotal);
+    if(pTotal == -1)
+    {
+        return;
+    }
+    m_dlProgress->setValue(pRcvd * 100 / pTotal);    
     m_dlProgress->setAutoClose(true);
 }
 
@@ -309,33 +313,36 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
         lFullName.append(lFldDef->text);        
 
         CDatabaseManager::s_Field *lFieldCheck = new CDatabaseManager::s_Field();
-        QString lState;
-        int lLastRow;
+        QString lState;        
+        QTreeWidgetItem *lTopItem = new QTreeWidgetItem();
+        lTopItem->setText(0,lFullName);
         if(ldbman->GetField(lFld->IACO,lFieldCheck))
         {
-            lLastRow = status->appendList(&lFullName, 0);
             lState = "...im Abo; wird geprüft.";
-            status->appendList(&lState, 1, lLastRow);
+            lTopItem->setText(1,lState);
+            status->appendList(lTopItem);
+            QTreeWidgetItem *lChildItem = new QTreeWidgetItem();
             if(ldbman->BrowseCharts(lFieldCheck->ID))
             {
                 CDatabaseManager::s_Chart *lchart = ldbman->GetActualChart();
                 if(lchart->Date < m_lastAmmended)
                 {
-                    lState = "...wird erneuert!";
-                    status->appendList(&lState,1);
-                    // TODO: Charts downloaden und DB nachpflegen...
+                    lState = "...wird erneuert!";                    
+                    lparent->updateField(&lFld->IACO);
                 }
                 else
                 {
-                    lState = "...ist aktuell!";
-                    status->appendList(&lState,1);
+                    lState = "...ist aktuell!";                                        
                 }
+                lChildItem->setText(1, lState);
+                status->appendList(lChildItem);
             }
         }
         else
-        {            
+        {                        
             lState = "...übersprungen";
-            status->appendList(&lState,1,lLastRow);
+            lTopItem->setText(1, lState);
+            status->appendList(lTopItem);
         }
         lFld->Name = lFldDef->text;
         lFldList->append(*lFld);
