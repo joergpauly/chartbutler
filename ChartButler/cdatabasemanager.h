@@ -37,6 +37,7 @@
 #include <QDir>
 #include <qsql.h>
 #include <QSqlDatabase>
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QList>

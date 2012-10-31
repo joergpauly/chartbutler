@@ -55,6 +55,9 @@ CDatabaseManager::CDatabaseManager(QObject *parent) :
         msg->setText("Fehler beim Öffnen der Datenbank!");
         msg->setInformativeText("Datenbank lässt sich nicht öffnen!");
         msg->setIcon(QMessageBox::Critical);
+        QSqlError lError;
+        lError = m_db.lastError();
+        msg->setDetailedText(lError.text());
         msg->exec();
     }
 
