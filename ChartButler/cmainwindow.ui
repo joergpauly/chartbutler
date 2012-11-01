@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>585</width>
-    <height>579</height>
+    <width>604</width>
+    <height>604</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,144 +18,178 @@
     <normaloff>Icon1.ico</normaloff>Icon1.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>-1</x>
-      <y>-1</y>
-      <width>431</width>
-      <height>531</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QTreeWidget" name="trvCharts">
-       <property name="contextMenuPolicy">
-        <enum>Qt::ActionsContextMenu</enum>
-       </property>
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Doppel-Click zum Anzeigen&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="autoFillBackground">
-        <bool>true</bool>
-       </property>
-       <property name="showDropIndicator" stdset="0">
-        <bool>false</bool>
-       </property>
-       <property name="alternatingRowColors">
-        <bool>true</bool>
-       </property>
-       <property name="animated">
-        <bool>true</bool>
-       </property>
-       <property name="columnCount">
-        <number>2</number>
-       </property>
-       <attribute name="headerDefaultSectionSize">
-        <number>300</number>
-       </attribute>
-       <attribute name="headerMinimumSectionSize">
-        <number>100</number>
-       </attribute>
-       <attribute name="headerStretchLastSection">
-        <bool>false</bool>
-       </attribute>
-       <column>
-        <property name="text">
-         <string notr="true">1</string>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horiInner" stretch="0">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinAndMaxSize</enum>
+      </property>
+      <item>
+       <widget class="QTreeWidget" name="trvCharts">
+        <property name="contextMenuPolicy">
+         <enum>Qt::ActionsContextMenu</enum>
         </property>
-       </column>
-       <column>
-        <property name="text">
-         <string notr="true">2</string>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Doppel-Click zum Anzeigen&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
-       </column>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>0</y>
-      <width>167</width>
-      <height>531</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QPushButton" name="cmdAdd">
-       <property name="toolTip">
-        <string>Einen neuen Flugplatz abonnieren und die Karten herunterladen.</string>
-       </property>
-       <property name="text">
-        <string>Flugplatz hinzufügen...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cmdUpdate">
-       <property name="toolTip">
-        <string>Alle abonnierten Karten auf Aktualität prüfen und ggf. aktualisieren.</string>
-       </property>
-       <property name="text">
-        <string>Karten aktualisieren</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cmdOptions">
-       <property name="toolTip">
-        <string>Login-Daten für GAT24.de und Karten-Ablagepfad festlegen.</string>
-       </property>
-       <property name="text">
-        <string>Optionen...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cmdHelpInfo">
-       <property name="toolTip">
-        <string>Hilfe zu und Informationen über ChartButler anzeigen.</string>
-       </property>
-       <property name="text">
-        <string>Hilfe / Info...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cmdClose">
-       <property name="toolTip">
-        <string>ChartButler beenden und Fenster schließen.</string>
-       </property>
-       <property name="text">
-        <string>Schließen</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
+        <property name="autoFillBackground">
+         <bool>true</bool>
+        </property>
+        <property name="showDropIndicator" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="animated">
+         <bool>true</bool>
+        </property>
+        <property name="columnCount">
+         <number>2</number>
+        </property>
+        <attribute name="headerDefaultSectionSize">
+         <number>300</number>
+        </attribute>
+        <attribute name="headerMinimumSectionSize">
+         <number>100</number>
+        </attribute>
+        <attribute name="headerStretchLastSection">
+         <bool>false</bool>
+        </attribute>
+        <column>
+         <property name="text">
+          <string notr="true">1</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string notr="true">2</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="vertiInner">
+      <item>
+       <widget class="QPushButton" name="cmdAdd">
+        <property name="toolTip">
+         <string>Einen neuen Flugplatz abonnieren und die Karten herunterladen.</string>
+        </property>
+        <property name="text">
+         <string>Flugplatz hinzufügen...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cmdUpdate">
+        <property name="toolTip">
+         <string>Alle abonnierten Karten auf Aktualität prüfen und ggf. aktualisieren.</string>
+        </property>
+        <property name="text">
+         <string>Karten aktualisieren</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cmdOptions">
+        <property name="toolTip">
+         <string>Login-Daten für GAT24.de und Karten-Ablagepfad festlegen.</string>
+        </property>
+        <property name="text">
+         <string>Optionen...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cmdGat24">
+        <property name="maximumSize">
+         <size>
+          <width>130</width>
+          <height>130</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string extracomment="Gat24.de direkt aufrufen"/>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="autoFillBackground">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../../Projekte/ChartButlerCS/ChartButlerCS/gat24.jpg</normaloff>../../Projekte/ChartButlerCS/ChartButlerCS/gat24.jpg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>128</width>
+          <height>128</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cmdHelpInfo">
+        <property name="toolTip">
+         <string>Hilfe zu und Informationen über ChartButler anzeigen.</string>
+        </property>
+        <property name="text">
+         <string>Hilfe / Info...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cmdClose">
+        <property name="toolTip">
+         <string>ChartButler beenden und Fenster schließen.</string>
+        </property>
+        <property name="text">
+         <string>Schließen</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>585</width>
+     <width>604</width>
      <height>21</height>
     </rect>
    </property>

@@ -105,6 +105,8 @@ private slots:
 
     void on_cmdHelpInfo_clicked();
 
+    void on_cmdGat24_clicked();
+
 private:
     Ui::CMainWindow *ui;
     void closeEvent(QCloseEvent *e);    

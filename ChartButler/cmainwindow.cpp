@@ -285,3 +285,8 @@ void CMainWindow::on_cmdHelpInfo_clicked()
     help->exec();
     delete help;
 }
+
+void CMainWindow::on_cmdGat24_clicked()
+{
+
+}
