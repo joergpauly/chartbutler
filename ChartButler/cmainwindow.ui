@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>Joerg Pauly</author>
  <class>CMainWindow</class>
  <widget class="QMainWindow" name="CMainWindow">
   <property name="geometry">
@@ -137,7 +138,7 @@
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>../../Projekte/ChartButlerCS/ChartButlerCS/gat24.jpg</normaloff>../../Projekte/ChartButlerCS/ChartButlerCS/gat24.jpg</iconset>
+          <normaloff>../ChartButlerCS/ChartButlerCS/gat24.jpg</normaloff>../ChartButlerCS/ChartButlerCS/gat24.jpg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -190,7 +191,7 @@
      <x>0</x>
      <y>0</y>
      <width>604</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

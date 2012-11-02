@@ -35,19 +35,17 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QDesktopServices>
 #include <QTreeWidgetItem>
 #include <QMenu>
 #include <QAction>
+#include <QList>
 
 
 #ifdef Q_WS_WIN
 #include <QProcess>
 #endif
 
-#ifdef Q_WS_X11
-#include <QUrl>
-#include <QDesktopServices>
-#endif
 
 // Projekt-Header
 #include "cnetworkmanager.h"
@@ -75,6 +73,7 @@ private:
     QAction *m_actUpdate;
     QAction *m_actShowInReader;
     QTreeWidgetItem* m_clickedItem;
+    bool m_networkReady;
 
 
 // Public Member
@@ -82,6 +81,7 @@ public:
     CDatabaseManager *GetDBman();
     void SetupTree();
     void updateField(QString* pICAO);
+    void nextField();
     explicit CMainWindow(QWidget *parent = 0);
     ~CMainWindow();
 
@@ -111,6 +111,7 @@ private:
     Ui::CMainWindow *ui;
     void closeEvent(QCloseEvent *e);    
     void contextMenuEvent(QContextMenuEvent* e);
+    QList<QString*>* parseFields(QString pICAO);
 
 };
 

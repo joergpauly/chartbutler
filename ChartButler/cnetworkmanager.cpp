@@ -88,13 +88,26 @@ void CNetworkManager::getChart(QString* pICAO)
     m_action = ACT_NEW;
     // Clean up list of new charts
     m_newCharts = new QList<QString>();
-    m_ICAO = *pICAO;
-    QString lsUrl(ICAOURL);
-    lsUrl.append(pICAO);
-    lsUrl.append("&SID=");
-    lsUrl.append(m_sid);
-    QUrl* lUrl = new QUrl(lsUrl);
-    downloadData(lUrl);
+    QList<QString*> *lfldList = parseFields(*pICAO);
+    for(int lcnt = 0; lcnt < lfldList->count(); lcnt++)
+    {
+        m_ICAO = *pICAO;
+        QString lsUrl(ICAOURL);
+        lsUrl.append(pICAO);
+        lsUrl.append("&SID=");
+        lsUrl.append(m_sid);
+        QUrl* lUrl = new QUrl(lsUrl);
+        downloadData(lUrl);
+
+        do
+        {
+            if(m_nextField)
+            {
+                break;
+            }
+
+        } while(!m_nextField);
+    }
 }
 
 void CNetworkManager::downloadData(QUrl* pUrl, bool pShowState)
@@ -191,6 +204,10 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             lChartFile->close();
             storeChartInDb(&lFileName, &lCFPath);
             m_newCharts->append(lCFPath);
+            if(m_lastRetrieve)
+            {
+                m_nextField = true;
+            }
         }        
     }
 }
@@ -234,6 +251,7 @@ void CNetworkManager::extractSID()
 
 void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
 {
+    m_lastRetrieve = false;
     CMainWindow* lparent = (CMainWindow*)m_parent;
     CDatabaseManager *ldbman = lparent->GetDBman();
     CDatabaseManager::s_Field* pFld = new CDatabaseManager::s_Field();
@@ -266,9 +284,11 @@ void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
     int i;
     for(i = 0; i < pLinkList->count(); i++)
     {
+
         QUrl lUrl(pLinkList->at(i));
         downloadData(&lUrl, true);
     }
+    m_lastRetrieve = true;
 }
 
 QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
@@ -441,3 +461,30 @@ void CNetworkManager::storeChartInDb(QString* pFileName, QString* pPath)
 }
 
 
+QList<QString*> *CNetworkManager::parseFields(QString pICAO)
+{
+    QList<QString*> *lList = new QList<QString*>();
+    int cnt = 0;
+    QString *lChr = new QString();
+    do
+    {
+
+        if((pICAO.mid(cnt,1) != " ") &
+                (pICAO.mid(cnt,1) != ",") &
+                (pICAO.mid(cnt,1) != ";") &
+                (pICAO.mid(cnt,1) != "-"))
+        {
+            lChr->append(pICAO.mid(cnt,1));
+        }
+        else
+        {
+            if(lChr->length() == 4)
+            {
+                lList->append(lChr);
+                lChr = new QString();
+            }
+        }
+        cnt++;
+    } while(cnt <= pICAO.length());
+    return lList;
+}

@@ -56,6 +56,7 @@ public:
     void getChart(QString* pICAO);
 
 
+
 private:
     QObject* m_parent;
     QString m_uid;
@@ -73,6 +74,8 @@ private:
     QList<QString> *m_fieldList;
     QList<QString> *m_newCharts;
     QProgressDialog* m_dlProgress;
+    bool m_lastRetrieve;
+    bool m_nextField;
 
     struct txtPos
     {
@@ -90,6 +93,7 @@ private:
     QStringList* getLinkList(QString* pStream);
     void getFieldName(QString* pStream);
     void storeChartInDb(QString *pFileName, QString *pPath);
+    QList<QString *> *parseFields(QString pICAO);
 
 public slots:
     void dlFinished(QNetworkReply* pReply);

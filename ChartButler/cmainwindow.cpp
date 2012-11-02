@@ -100,6 +100,34 @@ void CMainWindow::contextMenuEvent(QContextMenuEvent *e)
     m_contextMenu->exec(e->globalPos());
 }
 
+QList<QString*> *CMainWindow::parseFields(QString pICAO)
+{
+    QList<QString*> *lList = new QList<QString*>();
+    int cnt = 0;
+    QString *lChr = new QString();
+    do
+    {
+
+        if((pICAO.mid(cnt,1) != " ") &
+                (pICAO.mid(cnt,1) != ",") &
+                (pICAO.mid(cnt,1) != ";") &
+                (pICAO.mid(cnt,1) != "-"))
+        {
+            lChr->append(pICAO.mid(cnt,1));
+        }
+        else
+        {
+            if(lChr->length() == 4)
+            {
+                lList->append(lChr);
+                lChr = new QString();
+            }
+        }
+        cnt++;
+    } while(cnt <= pICAO.length());
+    return lList;
+}
+
 
 void CMainWindow::on_cmdAdd_clicked()
 {
@@ -113,9 +141,16 @@ void CMainWindow::on_cmdAdd_clicked()
     if(inDlg->exec() == QInputDialog::Accepted)
     {
         QString icao;
-        icao = inDlg->textValue().toUpper();
+        icao = inDlg->textValue().toUpper();        
+        /*QList<QString*>* lFldList;
+        lFldList = this->parseFields(icao);*/
         // Suchfunktion in Netzwerk-Klasse anstoﬂen
+        /*for(int cnt = 0; cnt < lFldList->count(); cnt++)
+        {*/
         mnet->getChart(&icao);
+
+
+        /*}*/
     }
 
     // Aufr‰umen
@@ -179,6 +214,11 @@ void CMainWindow::updateField(QString *pICAO)
     mdb->RemoveField(&lfld->IACO);
     mnet->getChart(&lICAO);
     SetupTree();
+}
+
+void CMainWindow::nextField()
+{
+    m_networkReady = true;
 }
 
 void CMainWindow::on_cmdUpdate_clicked()
@@ -288,5 +328,6 @@ void CMainWindow::on_cmdHelpInfo_clicked()
 
 void CMainWindow::on_cmdGat24_clicked()
 {
-
+    QUrl lUrl("http://www.gat24.de");
+    QDesktopServices::openUrl(lUrl);
 }
