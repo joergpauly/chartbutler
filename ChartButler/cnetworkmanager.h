@@ -76,6 +76,10 @@ private:
     QProgressDialog* m_dlProgress;
     bool m_lastRetrieve;
     bool m_nextField;
+    int m_chartInSequence;
+    int m_chartsToLoad;
+    int m_fieldInSequence;
+    QList<QString> *m_linkList;
 
     struct txtPos
     {
@@ -93,13 +97,17 @@ private:
     QStringList* getLinkList(QString* pStream);
     void getFieldName(QString* pStream);
     void storeChartInDb(QString *pFileName, QString *pPath);
-    QList<QString *> *parseFields(QString pICAO);
+    QList<QString> *parseFields(QString pICAO);
 
 public slots:
     void dlFinished(QNetworkReply* pReply);
     void dlProgress(qint64 pRcvd, qint64 pTotal);
+    void onChartDlFinished();
+    void dlNextField();
 
-
+signals:
+    void chartDlFinished();
+    void fieldDlFinished();
 
 };
 

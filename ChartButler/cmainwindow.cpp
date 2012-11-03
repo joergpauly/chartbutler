@@ -142,15 +142,7 @@ void CMainWindow::on_cmdAdd_clicked()
     {
         QString icao;
         icao = inDlg->textValue().toUpper();        
-        /*QList<QString*>* lFldList;
-        lFldList = this->parseFields(icao);*/
-        // Suchfunktion in Netzwerk-Klasse anstoﬂen
-        /*for(int cnt = 0; cnt < lFldList->count(); cnt++)
-        {*/
         mnet->getChart(&icao);
-
-
-        /*}*/
     }
 
     // Aufr‰umen

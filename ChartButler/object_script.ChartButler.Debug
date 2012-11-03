@@ -1,0 +1,15 @@
+INPUT(
+./debug/main.o
+./debug/cmainwindow.o
+./debug/cdatabasemanager.o
+./debug/coptions.o
+./debug/cnetworkmanager.o
+./debug/cstatus.o
+./debug/chelp.o
+./debug/moc_cmainwindow.o
+./debug/moc_cdatabasemanager.o
+./debug/moc_coptions.o
+./debug/moc_cnetworkmanager.o
+./debug/moc_cstatus.o
+./debug/moc_chelp.o
+);

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql network test
+QT       += core gui sql network
 
 TARGET = ChartButler
 TEMPLATE = app

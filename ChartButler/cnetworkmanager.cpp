@@ -39,6 +39,8 @@ CNetworkManager::CNetworkManager(QObject *parent) :
     m_dlProgress = new QProgressDialog();
     // Connect the Request's finished()-signal to our slot
     connect(&m_nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(dlFinished(QNetworkReply*)));
+    connect(this, SIGNAL(chartDlFinished()),SLOT(onChartDlFinished()));
+    connect(this,SIGNAL(fieldDlFinished()),SLOT(dlNextField()));
 
     // Get a settings object and extract login data
     QSettings l_opts(gCOMPANY, gAPP);
@@ -88,26 +90,10 @@ void CNetworkManager::getChart(QString* pICAO)
     m_action = ACT_NEW;
     // Clean up list of new charts
     m_newCharts = new QList<QString>();
-    QList<QString*> *lfldList = parseFields(*pICAO);
-    for(int lcnt = 0; lcnt < lfldList->count(); lcnt++)
-    {
-        m_ICAO = *pICAO;
-        QString lsUrl(ICAOURL);
-        lsUrl.append(pICAO);
-        lsUrl.append("&SID=");
-        lsUrl.append(m_sid);
-        QUrl* lUrl = new QUrl(lsUrl);
-        downloadData(lUrl);
-
-        do
-        {
-            if(m_nextField)
-            {
-                break;
-            }
-
-        } while(!m_nextField);
-    }
+    m_fieldList = new QList<QString>();
+    m_fieldList = parseFields(*pICAO);
+    m_fieldInSequence = 0;
+    dlNextField();
 }
 
 void CNetworkManager::downloadData(QUrl* pUrl, bool pShowState)
@@ -204,10 +190,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             lChartFile->close();
             storeChartInDb(&lFileName, &lCFPath);
             m_newCharts->append(lCFPath);
-            if(m_lastRetrieve)
-            {
-                m_nextField = true;
-            }
+            emit chartDlFinished();
         }        
     }
 }
@@ -220,6 +203,35 @@ void CNetworkManager::dlProgress(qint64 pRcvd, qint64 pTotal)
     }
     m_dlProgress->setValue(pRcvd * 100 / pTotal);    
     m_dlProgress->setAutoClose(true);
+}
+
+void CNetworkManager::onChartDlFinished()
+{
+    if(m_chartInSequence < m_chartsToLoad)
+    {
+        QUrl lUrl(m_linkList->at(m_chartInSequence));
+        m_chartInSequence++;
+        downloadData(&lUrl,true);
+    }
+    else
+    {
+        emit fieldDlFinished();
+    }
+}
+
+void CNetworkManager::dlNextField()
+{
+    m_ICAO = m_fieldList->at(m_fieldInSequence);
+    if(m_fieldInSequence < m_fieldList->count())
+    {
+        QString lUrlString(ICAOURL);
+        lUrlString.append(m_ICAO);
+        lUrlString.append("&SID=");
+        lUrlString.append(m_sid);
+        QUrl lUrl(lUrlString);
+        downloadData(&lUrl);
+    }
+    m_fieldInSequence++;
 }
 
 void CNetworkManager::extractSID()
@@ -281,14 +293,11 @@ void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
     m_FieldDir = CPath;
     m_FID = ldbman->AddField(m_ICAO, m_FieldName, m_FieldDir);
     lparent->SetupTree();
-    int i;
-    for(i = 0; i < pLinkList->count(); i++)
-    {
 
-        QUrl lUrl(pLinkList->at(i));
-        downloadData(&lUrl, true);
-    }
-    m_lastRetrieve = true;
+    m_chartsToLoad = pLinkList->count();
+    m_chartInSequence = 0;
+    m_linkList = pLinkList;
+    emit chartDlFinished();
 }
 
 QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
@@ -461,9 +470,10 @@ void CNetworkManager::storeChartInDb(QString* pFileName, QString* pPath)
 }
 
 
-QList<QString*> *CNetworkManager::parseFields(QString pICAO)
+QList<QString> *CNetworkManager::parseFields(QString pICAO)
 {
-    QList<QString*> *lList = new QList<QString*>();
+    pICAO.append("  ");
+    QList<QString> *lList = new QList<QString>();
     int cnt = 0;
     QString *lChr = new QString();
     do
@@ -480,7 +490,7 @@ QList<QString*> *CNetworkManager::parseFields(QString pICAO)
         {
             if(lChr->length() == 4)
             {
-                lList->append(lChr);
+                lList->append(*lChr);
                 lChr = new QString();
             }
         }
