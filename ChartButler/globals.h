@@ -33,6 +33,11 @@
 #define gCOMPANY "MEGAMover.de"
 #define gAPP "ChartButler V2.0"
 
+// Version
+#define MAJOR 2
+#define MINOR 0
+#define REV   54
+
 // Server-URLs
 #define LOGINURL "http://www.gat24.de/data.php?rubrik=aktuell&unterrubrik=neues&dokument=neues&SID=0"
 #define ICAOURL "http://www.gat24.de/data.php?rubrik=briefing&unterrubrik=flugplaetze&dokument=karten&ICAO="

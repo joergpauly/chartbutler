@@ -98,6 +98,7 @@ private:
     void getFieldName(QString* pStream);
     void storeChartInDb(QString *pFileName, QString *pPath);
     QList<QString> *parseFields(QString pICAO);
+    void checkForUpdate();
 
 public slots:
     void dlFinished(QNetworkReply* pReply);

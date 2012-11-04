@@ -193,6 +193,36 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             emit chartDlFinished();
         }        
     }
+
+    if(ldlData.contains("cbver"))
+    {
+        QString lStart("cbver");
+        QString lEnd("..");
+        txtPos lMaj = *getTextBetween(&ldlData,&lStart,&lEnd,0);
+        txtPos lMin = *getTextBetween(&ldlData,&lEnd,&lEnd,lMaj.pos);
+        txtPos lRev = *getTextBetween(&ldlData,&lEnd,&lEnd,lMin.pos);
+        bool upd = false;
+        if(lMaj.text.toInt() > MAJOR)
+        {
+            upd = true;
+        }
+        if((lMaj.text.toInt() == MAJOR) & (lMin.text.toInt() > MINOR))
+        {
+            upd = true;
+        }
+        if((lMaj.text.toInt() == MAJOR) &
+           (lMin.text.toInt() == MINOR) &
+            (lRev.text.toInt() >= REV))
+        {
+            upd = true;
+        }
+
+        if(upd)
+        {
+            QUrl lUrl("http://megamover.de/luftfahrt-nur-fliegen-ist-schoener/softwarefuerdenfliegeralltag/chartbutler/index.html");
+            QDesktopServices::openUrl(lUrl);
+        }
+    }
 }
 
 void CNetworkManager::dlProgress(qint64 pRcvd, qint64 pTotal)
@@ -497,4 +527,10 @@ QList<QString> *CNetworkManager::parseFields(QString pICAO)
         cnt++;
     } while(cnt <= pICAO.length());
     return lList;
+}
+
+void CNetworkManager::checkForUpdate()
+{
+    QUrl lUrl("http://www.megamover.de/downloads/cb/version.txt");
+    downloadData(&lUrl);
 }
