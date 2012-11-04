@@ -8,7 +8,7 @@ QT       += core gui sql network
 
 TARGET = ChartButler
 TEMPLATE = app
-
+VERSION = 2.0.0
 
 SOURCES += main.cpp\
         cmainwindow.cpp \
