@@ -54,7 +54,7 @@ public:
     void updateCharts();
     void updateField(QString* pICAO);
     void getChart(QString* pICAO);
-
+    void getChartFromList();
 
 
 private:

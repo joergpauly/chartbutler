@@ -36,12 +36,12 @@ CNetworkManager::CNetworkManager(QObject *parent) :
 {
     // Save the parent.
     m_parent = parent;
-    m_dlProgress = new QProgressDialog();
+    m_dlProgress = new QProgressDialog();    
     // Connect the Request's finished()-signal to our slot
     connect(&m_nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(dlFinished(QNetworkReply*)));
     connect(this, SIGNAL(chartDlFinished()),SLOT(onChartDlFinished()));
     connect(this,SIGNAL(fieldDlFinished()),SLOT(dlNextField()));
-
+    checkForUpdate();
     // Get a settings object and extract login data
     QSettings l_opts(gCOMPANY, gAPP);
     m_uid = l_opts.value("UID").toString();
@@ -92,6 +92,14 @@ void CNetworkManager::getChart(QString* pICAO)
     m_newCharts = new QList<QString>();
     m_fieldList = new QList<QString>();
     m_fieldList = parseFields(*pICAO);
+    m_fieldInSequence = 0;
+    dlNextField();
+}
+
+void CNetworkManager::getChartFromList()
+{
+    m_action = ACT_UPD;
+    m_newCharts = new QList<QString>();
     m_fieldInSequence = 0;
     dlNextField();
 }
@@ -219,8 +227,35 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
 
         if(upd)
         {
-            QUrl lUrl("http://megamover.de/luftfahrt-nur-fliegen-ist-schoener/softwarefuerdenfliegeralltag/chartbutler/index.html");
-            QDesktopServices::openUrl(lUrl);
+            QMessageBox *lBox = new QMessageBox();
+            lBox->setWindowTitle("Update verfügbar");
+            lBox->setText("Es ist ein Update verfügbar");
+            QString lver;
+            lver = "Installierte Version: ";
+            lver.append(QString::number(MAJOR));
+            lver.append(".");
+            lver.append(QString::number(MINOR));
+            lver.append(".");
+            lver.append(QString::number(REV));
+            lver.append("\n");
+            lver.append("Verfügbare Version: ");
+            lver.append(lMaj.text);
+            lver.append(".");
+            lver.append(lMin.text);
+            lver.append(".");
+            lver.append(lRev.text);
+            lver.append("\n\n");
+            lver.append("Wollen Sie zur Download-Seite geleitet werden?");
+            lBox->setInformativeText(lver);
+            lBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            lBox->setButtonText(QMessageBox::Yes, "Klar, man will ja up2date bleiben!");
+            lBox->setButtonText(QMessageBox::No, "Nö, wieso? Läuft doch...");
+            lBox->setDefaultButton(QMessageBox::Yes);
+            if(lBox->exec() == QMessageBox::Yes)
+            {
+                QUrl lUrl("http://megamover.de/luftfahrt-nur-fliegen-ist-schoener/softwarefuerdenfliegeralltag/chartbutler/index.html");
+                QDesktopServices::openUrl(lUrl);
+            }
         }
     }
 }
@@ -332,6 +367,7 @@ void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
 
 QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
 {
+    m_fieldList = new QList<QString>();
     QList<CDatabaseManager::s_Field> *lFldList = new QList<CDatabaseManager::s_Field>;
     QString ldlData(m_dlData);
     QString lCmp("Karten und Daten zum ");
@@ -387,7 +423,7 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
                 if(lchart->Date < m_lastAmmended)
                 {
                     lState = "...wird erneuert!";                    
-                    lparent->updateField(&lFld->IACO);
+                    m_fieldList->append(lFld->IACO);
                 }
                 else
                 {
@@ -407,6 +443,7 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
         lFldList->append(*lFld);
         lLastPos = lFldDef->pos;
     }
+    getChartFromList();
     return lFldList;
 }
 
