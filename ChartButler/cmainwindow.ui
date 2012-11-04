@@ -15,8 +15,8 @@
    <string>ChartButler (C) 2012 Joerg Pauly</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>Icon1.ico</normaloff>Icon1.ico</iconset>
+   <iconset resource="cbRessources.qrc">
+    <normaloff>:/new/img/cb.ico</normaloff>:/new/img/cb.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -137,8 +137,8 @@
          <string notr="true"/>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>../ChartButlerCS/ChartButlerCS/gat24.jpg</normaloff>../ChartButlerCS/ChartButlerCS/gat24.jpg</iconset>
+         <iconset resource="cbRessources.qrc">
+          <normaloff>:/new/img/gat24.jpg</normaloff>:/new/img/gat24.jpg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -206,6 +206,8 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="cbRessources.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/img">
+        <file>gat24.jpg</file>
+        <file>cb.ico</file>
+    </qresource>
+</RCC>

@@ -33,6 +33,9 @@ FORMS    += cmainwindow.ui \
     cstatus.ui \
     chelp.ui
 
+RESOURCES += \
+    cbRessources.qrc
+
 
 
 

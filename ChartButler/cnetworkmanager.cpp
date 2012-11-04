@@ -220,10 +220,10 @@ void CNetworkManager::onChartDlFinished()
 }
 
 void CNetworkManager::dlNextField()
-{
-    m_ICAO = m_fieldList->at(m_fieldInSequence);
+{    
     if(m_fieldInSequence < m_fieldList->count())
     {
+        m_ICAO = m_fieldList->at(m_fieldInSequence);
         QString lUrlString(ICAOURL);
         lUrlString.append(m_ICAO);
         lUrlString.append("&SID=");
