@@ -36,6 +36,10 @@ FORMS    += cmainwindow.ui \
 RESOURCES += \
     cbRessources.qrc
 
+OTHER_FILES += \
+    cb.ico \
+    cb.png
+
 
 
 
