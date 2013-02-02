@@ -220,7 +220,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
         }
         if((lMaj.text.toInt() == MAJOR) &
            (lMin.text.toInt() == MINOR) &
-            (lRev.text.toInt() >= REV))
+            (lRev.text.toInt() > REV))
         {
             upd = true;
         }
