@@ -38,7 +38,8 @@ RESOURCES += \
 
 OTHER_FILES += \
     cb.ico \
-    cb.png
+    cb.png \
+    gat24.jpg
 
 
 
