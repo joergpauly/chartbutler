@@ -224,14 +224,14 @@ void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int colu
     QString lFname(item->data(0, Qt::UserRole).toString());
     if(lFname.right(4).toLower() == ".pdf")
     {
-        #ifdef Q_WS_WIN
+        #ifdef Q_OS_WIN
             QStringList lArg(lFname);
             QProcess lReader;
             QString pdfRead(mopt->pdfExe());
             lReader.startDetached(pdfRead, lArg);
         #endif
 
-        #ifdef Q_WS_X11
+        #ifdef Q_OS_X11
             lFname.insert(0, "file://");
             QUrl lUrl(lFname);
             QDesktopServices::openUrl(lUrl);
