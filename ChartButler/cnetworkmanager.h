@@ -40,7 +40,7 @@
 #include <QUrl>
 #include <QList>
 #include <QDate>
-#include <QProgressDialog>
+#include <QtWidgets/QProgressDialog>
 #include "cdatabasemanager.h"
 
 #define ACT_NEW 0

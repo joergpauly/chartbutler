@@ -30,15 +30,15 @@
 #define CMAINWINDOW_H
 
 // System-Header
-#include <QMainWindow>
+#include <QtWidgets/QMainWindow>
 #include <QCloseEvent>
 #include <QMouseEvent>
-#include <QMessageBox>
-#include <QInputDialog>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QInputDialog>
 #include <QDesktopServices>
-#include <QTreeWidgetItem>
-#include <QMenu>
-#include <QAction>
+#include <QtWidgets/QTreeWidgetItem>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QAction>
 #include <QList>
 
 

@@ -30,9 +30,9 @@
 #define CDATABASEMANAGER_H
 
 // System-Header
-#include <QApplication>
+#include <QtGui/QGuiApplication>
 #include <QObject>
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QFile>
 #include <QDir>
 #include <qsql.h>
@@ -42,7 +42,7 @@
 #include <QSqlRecord>
 #include <QList>
 #include <QDate>
-#include "qsql_sqlite.h"
+
 
 
 class CDatabaseManager : public QObject

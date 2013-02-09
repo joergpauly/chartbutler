@@ -30,10 +30,10 @@
 #define COPTIONS_H
 
 // System-Header
-#include <QDialog>
+#include <QtWidgets/QDialog>
 #include <QSettings>
 #include <QDir>
-#include <QFileDialog>
+#include <QtWidgets/QFileDialog>
 
 // Private Header
 #include "cdatabasemanager.h"
