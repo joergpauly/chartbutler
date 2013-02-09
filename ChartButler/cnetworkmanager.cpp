@@ -134,7 +134,7 @@ void CNetworkManager::getSID()
     lUrl.setUrl(LOGINURL);
     m_request.setUrl(lUrl);
     m_request.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
-    m_nam.post(m_request,lLogin.toAscii());
+    m_nam.post(m_request,lLogin.toLatin1());
 }
 
 void CNetworkManager::dlFinished(QNetworkReply* pReply)
@@ -518,12 +518,12 @@ void CNetworkManager::getFieldName(QString *pStream)
     m_FieldName = getTextBetween(pStream, &lStart, &lEnd, 0)->text;
     m_FieldName.replace(m_FieldName.indexOf("/"),1,"-");
     m_FieldName = m_FieldName.toLower();
-    QChar lfst(m_FieldName.at(0).toUpper().toAscii());
+    QChar lfst(m_FieldName.at(0).toUpper().toLatin1());
     m_FieldName.replace(0,1,QString(lfst));
     int i = m_FieldName.indexOf("-");
     if(i != -1)
     {
-        QChar list(m_FieldName.at(i+1).toUpper().toAscii());
+        QChar list(m_FieldName.at(i+1).toUpper().toLatin1());
         m_FieldName.replace(i+1,1,QString(list));
     }
 }

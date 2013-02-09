@@ -135,7 +135,7 @@ void CMainWindow::on_cmdAdd_clicked()
     QInputDialog *inDlg = new QInputDialog(this);
     inDlg->setOkButtonText("Platz suchen");
     inDlg->setCancelButtonText("Suche abbrechen");
-    inDlg->setLabelText("Bitte geben Sie den ICAO-Code des gesuchten Platzes ein:");
+    inDlg->setLabelText("Bitte geben Sie den oder die ICAO-Codes\ndes gesuchten Platzes ein\n(Mehrere ICAO-Codes durch Leerzeichen, Komma, Semikolon\noder Minus getrennt):");
 
     // anzeigen und auswerten
     if(inDlg->exec() == QInputDialog::Accepted)

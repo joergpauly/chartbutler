@@ -4,11 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql network
+QT       += core widgets gui sql network
 
 TARGET = ChartButler
 TEMPLATE = app
-VERSION = 2.0.54
+VERSION = 2.1.55
 
 SOURCES += main.cpp\
         cmainwindow.cpp \

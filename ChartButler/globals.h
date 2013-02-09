@@ -31,12 +31,12 @@
 
 // Settings-Schlüssel
 #define gCOMPANY "MEGAMover.de"
-#define gAPP "ChartButler V2.0"
+#define gAPP "ChartButler V2.1"
 
 // Version
 #define MAJOR 2
-#define MINOR 0
-#define REV   54
+#define MINOR 1
+#define REV   55
 
 // Server-URLs
 #define LOGINURL "http://www.gat24.de/data.php?rubrik=aktuell&unterrubrik=neues&dokument=neues&SID=0"
