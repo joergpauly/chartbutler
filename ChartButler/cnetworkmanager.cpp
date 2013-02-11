@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -24,6 +24,7 @@
 *   CNetworkManager regelt den kompletten Datenverkehr mit dem GAT24.de-Server.
 *
 *****************************************************************************************/
+/* TODO: Liste der neu geladenen Karten erstellen und nach Beendigung ausgeben */
 
 #include "cnetworkmanager.h"
 #include "coptions.h"
@@ -334,7 +335,7 @@ void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
         lbox->exec();
         delete lbox;
         return;
-    }
+    } // FIXME: Warum wird diese MessageBox auch beim Update angezeigt???
     QString lFullName(m_ICAO);
     lFullName.append(" - ");
     lFullName.append(m_FieldName);

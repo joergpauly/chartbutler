@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -232,7 +232,7 @@ void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int colu
             lReader.startDetached(pdfRead, lArg);
         #endif
 
-        #ifdef Q_OS_X11
+        #ifdef Q_OS_LINUX
             lFname.insert(0, "file://");
             QUrl lUrl(lFname);
             QDesktopServices::openUrl(lUrl);

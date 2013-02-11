@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -42,7 +42,7 @@
 #include <QList>
 
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include <QProcess>
 #endif
 
