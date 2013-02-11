@@ -1,4 +1,4 @@
-﻿/****************************************************************************************
+/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -221,7 +221,6 @@ void CMainWindow::on_cmdUpdate_clicked()
 
 void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
-
     QString lFname(item->data(0, Qt::UserRole).toString());
     if(lFname.right(4).toLower() == ".pdf")
     {
