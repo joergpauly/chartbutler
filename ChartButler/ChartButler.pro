@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core widgets gui sql network
+QT += core widgets sql network
 
 TARGET = ChartButler
 TEMPLATE = app

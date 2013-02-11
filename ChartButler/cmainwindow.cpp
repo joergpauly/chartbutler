@@ -4,15 +4,15 @@
 *   Copyright (C) 2012 Joerg Pauly
 *   All Rights reserved
 *
-*   ChartButler ist Freie Software: Sie können es unter den Bedingungen
+*   ChartButler ist Freie Software: Sie kÃ¶nnen es unter den Bedingungen
 *   der GNU Lesser General Public License, wie von der Free Software Foundation,
-*   Version 3 der Lizenz oder (nach Ihrer Option) jeder späteren
-*   veröffentlichten Version, weiterverbreiten und/oder modifizieren.
+*   Version 3 der Lizenz oder (nach Ihrer Option) jeder spÃ¤teren
+*   verÃ¶ffentlichten Version, weiterverbreiten und/oder modifizieren.
 *
-*   Dieses Programm wird in der Hoffnung, dass es nützlich sein wird, aber
-*   OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
-*   Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
-*   Siehe die GNU Lesser General Public License für weitere Details.
+*   Dieses Programm wird in der Hoffnung, dass es nÃ¼tzlich sein wird, aber
+*   OHNE JEDE GEWÃ„HRLEISTUNG, bereitgestellt; sogar ohne die implizite
+*   GewÃ¤hrleistung der MARKTFÃ„HIGKEIT oder EIGNUNG FÃœR EINEN BESTIMMTEN ZWECK.
+*   Siehe die GNU Lesser General Public License fÃ¼r weitere Details.
 *
 *   Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
 *   Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
@@ -21,9 +21,10 @@
 /****************************************************************************************
 *
 *   CMainWindow.h
-*   Klasse zur Erstellung des Hauptfensters und der Menü- und Button-Prozeduren.
+*   Klasse zur Erstellung des Hauptfensters und der MenÃ¼- und Button-Prozeduren.
 *
 *****************************************************************************************/
+
 #include "cmainwindow.h"
 #include "ui_cmainwindow.h"
 
@@ -77,7 +78,7 @@ void CMainWindow::closeEvent(QCloseEvent *e)
     msg->setStandardButtons(QMessageBox::Ok | QMessageBox::Abort);
     msg->setDefaultButton(QMessageBox::Ok);
     msg->setIcon(QMessageBox::Question);
-    msg->setButtonText(QMessageBox::Abort, "Nicht schließen");
+    msg->setButtonText(QMessageBox::Abort, "Nicht schlieÃŸen");
 
     // Anzeigen und auswerten
     if(msg->exec() == QMessageBox::Ok)
@@ -91,7 +92,7 @@ void CMainWindow::closeEvent(QCloseEvent *e)
         e->ignore();
     }
 
-    // Aufräumen
+    // AufrÃ¤umen
     delete msg;
 }
 
@@ -145,7 +146,7 @@ void CMainWindow::on_cmdAdd_clicked()
         mnet->getChart(&icao);
     }
 
-    // Aufräumen
+    // AufrÃ¤umen
     delete inDlg;
 }
 
@@ -192,7 +193,7 @@ void CMainWindow::SetupTree()
         ui->trvCharts->addTopLevelItem(item);
     }while (mdb->NextField());
     QStringList lheaders;
-    lheaders.append("Plätze/Karten");
+    lheaders.append("PlÃ¤tze/Karten");
     lheaders.append("Stand vom");
     ui->trvCharts->setHeaderLabels(lheaders);
 }
@@ -242,13 +243,13 @@ void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int colu
 void CMainWindow::on_actRemove()
 {
     QMessageBox *lBox = new QMessageBox(this);
-    lBox->setWindowTitle("Platz löschen");
+    lBox->setWindowTitle("Platz lÃ¶schen");
     CDatabaseManager::s_Field* lfld = new CDatabaseManager::s_Field();
     QString lICAO(m_clickedItem->text(0).left(4).toUpper());
     mdb->GetField(lICAO,lfld);
     QString msg("Wollen Sie den Flugplatz\n");
     msg.append(lfld->Name);
-    msg.append("\nwirklich löschen?");
+    msg.append("\nwirklich lÃ¶schen?");
     lBox->setText(msg);
     lBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     lBox->setButtonText(QMessageBox::Yes,"Ja, flieg ich eh nicht mehr hin...");

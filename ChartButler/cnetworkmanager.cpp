@@ -4,15 +4,15 @@
 *   Copyright (C) 2012 Joerg Pauly
 *   All Rights reserved
 *
-*   ChartButler ist Freie Software: Sie können es unter den Bedingungen
+*   ChartButler ist Freie Software: Sie kÃ¶nnen es unter den Bedingungen
 *   der GNU Lesser General Public License, wie von der Free Software Foundation,
-*   Version 3 der Lizenz oder (nach Ihrer Option) jeder späteren
-*   veröffentlichten Version, weiterverbreiten und/oder modifizieren.
+*   Version 3 der Lizenz oder (nach Ihrer Option) jeder spÃ¤teren
+*   verÃ¶ffentlichten Version, weiterverbreiten und/oder modifizieren.
 *
-*   Dieses Programm wird in der Hoffnung, dass es nützlich sein wird, aber
-*   OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
-*   Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
-*   Siehe die GNU Lesser General Public License für weitere Details.
+*   Dieses Programm wird in der Hoffnung, dass es nÃ¼tzlich sein wird, aber
+*   OHNE JEDE GEWÃ„HRLEISTUNG, bereitgestellt; sogar ohne die implizite
+*   GewÃ¤hrleistung der MARKTFÃ„HIGKEIT oder EIGNUNG FÃœR EINEN BESTIMMTEN ZWECK.
+*   Siehe die GNU Lesser General Public License fÃ¼r weitere Details.
 *
 *   Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
 *   Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
@@ -228,8 +228,8 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
         if(upd)
         {
             QMessageBox *lBox = new QMessageBox();
-            lBox->setWindowTitle("Update verfügbar");
-            lBox->setText("Es ist ein Update verfügbar");
+            lBox->setWindowTitle("Update verfÃ¼gbar");
+            lBox->setText("Es ist ein Update verfÃ¼gbar");
             QString lver;
             lver = "Installierte Version: ";
             lver.append(QString::number(MAJOR));
@@ -238,7 +238,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             lver.append(".");
             lver.append(QString::number(REV));
             lver.append("\n");
-            lver.append("Verfügbare Version: ");
+            lver.append("VerfÃ¼gbare Version: ");
             lver.append(lMaj.text);
             lver.append(".");
             lver.append(lMin.text);
@@ -249,7 +249,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             lBox->setInformativeText(lver);
             lBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             lBox->setButtonText(QMessageBox::Yes, "Klar, man will ja up2date bleiben!");
-            lBox->setButtonText(QMessageBox::No, "Nö, wieso? Läuft doch...");
+            lBox->setButtonText(QMessageBox::No, "NÃ¶, wieso? LÃ¤uft doch...");
             lBox->setDefaultButton(QMessageBox::Yes);
             if(lBox->exec() == QMessageBox::Yes)
             {
@@ -306,24 +306,16 @@ void CNetworkManager::extractSID()
     QString lEnd("\">Mitglied");
     m_sid = getTextBetween(&lStream, &lStart, &lEnd, 0)->text;
     CMainWindow* lparent = (CMainWindow*) m_parent;
-    QMessageBox *dlgLogin = new QMessageBox(lparent);
-    dlgLogin->setStandardButtons(QMessageBox::Ok);
     if(m_sid == "0")
     {
+        QMessageBox *dlgLogin = new QMessageBox(lparent);
+        dlgLogin->setStandardButtons(QMessageBox::Ok);
         dlgLogin->setText("Ihre Sitzung wurde vom GAT24-Server nicht authorisiert.");
-        dlgLogin->setDetailedText("Der GAT24-Server konnte keine Sitzungs-ID zuteilen.\nMeist liegt dies an fehlenden oder ungültigen Login-daten.");
-        dlgLogin->setInformativeText("Bitte überprüfen Sie Ihre Zugangs-Daten.");
+        dlgLogin->setDetailedText("Der GAT24-Server konnte keine Sitzungs-ID zuteilen.\nMeist liegt dies an fehlenden oder ungÃ¼ltigen Login-daten.");
+        dlgLogin->setInformativeText("Bitte Ã¼berprÃ¼fen Sie Ihre Zugangs-Daten.");
         dlgLogin->setWindowTitle("Authorisierungs-Fehler!");
-    }
-    else
-    {
-        dlgLogin->setText("Verbindung erfolgreich aufgebaut");
-        QString lSidInfo("Sitzungs-ID:\n");
-        lSidInfo.append(m_sid);
-        dlgLogin->setInformativeText(lSidInfo);
-        dlgLogin->setWindowTitle("Server-Verbindung");
-    }
-    dlgLogin->exec();
+        dlgLogin->exec();
+    }       
 }
 
 void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
@@ -374,12 +366,12 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
     txtPos* lDate = getTextAfter(&ldlData, &lCmp, 10, 0);
     m_lastAmmended = QDate::fromString(lDate->text,"dd.MM.yyyy");
 
-    // Datum der letzten Änderung in CStatus anzeugen...
+    // Datum der letzten Ã„nderung in CStatus anzeugen...
     CMainWindow* lparent = (CMainWindow*) m_parent;
     CStatus* status = new CStatus(lparent);
-    QString lstatus("Änderungen vom ");
+    QString lstatus("Ã„nderungen vom ");
     lstatus.append(m_lastAmmended.toString("dd.MM.yyyy"));
-    status->setWindowTitle("Prüfung auf geänderte Karten");
+    status->setWindowTitle("PrÃ¼fung auf geÃ¤nderte Karten");
     status->show();
     status->setHeader(&lstatus);
     status->clearList();
@@ -413,7 +405,7 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
         lTopItem->setText(0,lFullName);
         if(ldbman->GetField(lFld->IACO,lFieldCheck))
         {
-            lState = "...im Abo; wird geprüft.";
+            lState = "...im Abo; wird geprÃ¼ft.";
             lTopItem->setText(1,lState);
             status->appendList(lTopItem);
             QTreeWidgetItem *lChildItem = new QTreeWidgetItem();
@@ -435,7 +427,7 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
         }
         else
         {                        
-            lState = "...übersprungen";
+            lState = "...Ã¼bersprungen";
             lTopItem->setText(1, lState);
             status->appendList(lTopItem);
         }
