@@ -19,8 +19,7 @@
 *
 *****************************************************************************************/
 
-#include <QtWidgets>
-#include <QtGui/QGuiApplication>
+#include <QtWidgets/QApplication>
 #include "cmainwindow.h"
 
 int main(int argc, char *argv[])
