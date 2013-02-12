@@ -142,7 +142,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
 {
     m_dlData = pReply->readAll();
     QString lcontent = pReply->header(QNetworkRequest::ContentTypeHeader).toString();
-    QString ldlData(m_dlData);
+    QString ldlData = m_dlData;
 
     if(ldlData.contains("Eingeloggt"))
     {
@@ -336,6 +336,7 @@ void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
         delete lbox;
         return;
     } // FIXME: Warum wird diese MessageBox auch beim Update angezeigt???
+      // FIXME: ...weil die Funktion nicht weiss, dass ein Update laeuft...
     QString lFullName(m_ICAO);
     lFullName.append(" - ");
     lFullName.append(m_FieldName);

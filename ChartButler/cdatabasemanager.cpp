@@ -107,10 +107,13 @@ bool CDatabaseManager::GetField(QString p_icao, s_Field* p_field)
 
 int CDatabaseManager::AddField(QString p_icao, QString p_name, QString p_path)
 {
+    QString l_icao = p_icao.toUtf8();
+    QString l_name = p_name.toUtf8();
+    QString l_path = p_path.toUtf8();
     qryFields = new QSqlQuery(m_db);
     // Check if passed field exists in database
     qryFields->prepare("SELECT * FROM Fields WHERE ICAO = :ICAO");
-    qryFields->bindValue(":ICAO", p_icao);
+    qryFields->bindValue(":ICAO", l_icao);
     qryFields->exec();
     qryFields->first();
     if (qryFields->isValid())
@@ -119,12 +122,12 @@ int CDatabaseManager::AddField(QString p_icao, QString p_name, QString p_path)
     }
     // Ok, a new field, so write it down.
     qryFields->prepare("INSERT INTO Fields (ICAO,Name,Path) VALUES (:ICAO, :Name, :Path)");
-    qryFields->bindValue(":ICAO", p_icao);
-    qryFields->bindValue(":Name", p_name);
-    qryFields->bindValue(":Path", p_path);
+    qryFields->bindValue(":ICAO", l_icao);
+    qryFields->bindValue(":Name", l_name);
+    qryFields->bindValue(":Path", l_path);
     qryFields->exec();
     qryFields->prepare("SELECT * FROM Fields WHERE ICAO = :ICAO");
-    qryFields->bindValue(":ICAO", p_icao);
+    qryFields->bindValue(":ICAO", l_icao);
     qryFields->exec();
     qryFields->first();
     return qryFields->value(qryFields->record().indexOf("ID")).toInt();
