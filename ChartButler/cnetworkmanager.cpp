@@ -142,7 +142,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
 {
     m_dlData = pReply->readAll();
     QString lcontent = pReply->header(QNetworkRequest::ContentTypeHeader).toString();
-    QString ldlData = m_dlData;
+    QString ldlData(QString::fromLatin1(m_dlData));
 
     if(ldlData.contains("Eingeloggt"))
     {
