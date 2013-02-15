@@ -325,7 +325,7 @@ void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
     CMainWindow* lparent = (CMainWindow*)m_parent;
     CDatabaseManager *ldbman = lparent->GetDBman();
     CDatabaseManager::s_Field* pFld = new CDatabaseManager::s_Field();
-    if(ldbman->GetField(*pICAO, pFld) == true)
+    if(ldbman->GetField(*pICAO, pFld) == true && m_action == ACT_NEW)
     {
         QMessageBox* lbox = new QMessageBox(lparent);
         lbox->setWindowTitle("Flugplatz vorhanden");
@@ -335,8 +335,7 @@ void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
         lbox->exec();
         delete lbox;
         return;
-    } // FIXME: Warum wird diese MessageBox auch beim Update angezeigt???
-      // FIXME: ...weil die Funktion nicht weiss, dass ein Update laeuft...
+    }
     QString lFullName(m_ICAO);
     lFullName.append(" - ");
     lFullName.append(m_FieldName);

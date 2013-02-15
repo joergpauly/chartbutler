@@ -24,7 +24,7 @@
 
   (C) 2012 Joerg Pauly
  *************************************************************************************************/
-// FIXME: Platznamen werden offenbar falsch codiert.
+
 
 #include "cdatabasemanager.h"
 
