@@ -134,7 +134,9 @@ void CNetworkManager::getSID()
     lUrl.setUrl(LOGINURL);
     m_request.setUrl(lUrl);
     m_request.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
+
     m_nam.post(m_request,lLogin.toLatin1());
+
 }
 
 void CNetworkManager::dlFinished(QNetworkReply* pReply)
