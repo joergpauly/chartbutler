@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -214,6 +214,17 @@ void CMainWindow::nextField()
     m_networkReady = true;
 }
 
+void CMainWindow::markAmmendedFields()
+{
+    for(int i=0; i< m_AmendedFields->count(); i++)
+    {
+        QTreeWidgetItem* item = ui->trvCharts->findItems(m_AmendedFields->at(i).toUtf8(),Qt::MatchStartsWith,0).at(0);
+        QFont fnt = item->font(0);
+        fnt.setBold(true);
+        item->setFont(0, fnt);
+    }
+}
+
 void CMainWindow::on_cmdUpdate_clicked()
 {
     mnet->updateCharts();
@@ -222,6 +233,9 @@ void CMainWindow::on_cmdUpdate_clicked()
 void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
     QString lFname(item->data(0, Qt::UserRole).toString());
+    QFont fnt = item->font(0);
+    fnt.setBold(false);
+    item->setFont(0, fnt);
     if(lFname.right(4).toLower() == ".pdf")
     {
         #ifdef Q_OS_WIN

@@ -211,14 +211,17 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
         txtPos lMin = *getTextBetween(&ldlData,&lEnd,&lEnd,lMaj.pos);
         txtPos lRev = *getTextBetween(&ldlData,&lEnd,&lEnd,lMin.pos);
         bool upd = false;
+
         if(lMaj.text.toInt() > MAJOR)
         {
             upd = true;
         }
+
         if((lMaj.text.toInt() == MAJOR) & (lMin.text.toInt() > MINOR))
         {
             upd = true;
         }
+
         if((lMaj.text.toInt() == MAJOR) &
            (lMin.text.toInt() == MINOR) &
             (lRev.text.toInt() > REV))
@@ -359,10 +362,10 @@ void CNetworkManager::getNewAirfield(QString *pICAO, QList<QString> *pLinkList)
 }
 
 QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
-{
+{    
     m_fieldList = new QList<QString>();
     QList<CDatabaseManager::s_Field> *lFldList = new QList<CDatabaseManager::s_Field>;
-    QString ldlData(m_dlData);
+    QString ldlData(QString::fromLatin1(m_dlData));
     QString lCmp("Karten und Daten zum ");
     txtPos* lDate = getTextAfter(&ldlData, &lCmp, 10, 0);
     m_lastAmmended = QDate::fromString(lDate->text,"dd.MM.yyyy");
@@ -376,6 +379,8 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
     status->show();
     status->setHeader(&lstatus);
     status->clearList();
+    // Liste der erneuerten Plätze initialisieren.
+    lparent->m_AmendedFields = new QList<QString>();
     CDatabaseManager* ldbman = lparent->GetDBman();
     txtPos *lFldDef;
     int lLastPos = lDate->pos;
@@ -417,10 +422,11 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
                 {
                     lState = "...wird erneuert!";                    
                     m_fieldList->append(lFld->IACO);
+                    lparent->m_AmendedFields->append(lFld->IACO);
                 }
                 else
                 {
-                    lState = "...ist aktuell!";                                        
+                    lState = "...ist aktuell!";
                 }
                 lChildItem->setText(1, lState);
                 status->appendList(lChildItem);
@@ -436,6 +442,7 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
         lFldList->append(*lFld);
         lLastPos = lFldDef->pos;
     }
+    lparent->markAmmendedFields();
     getChartFromList();
     return lFldList;
 }

@@ -78,10 +78,12 @@ private:
 
 // Public Member
 public:
+    QList<QString>* m_AmendedFields;
     CDatabaseManager *GetDBman();
     void SetupTree();
     void updateField(QString* pICAO);
     void nextField();
+    void markAmmendedFields();
     explicit CMainWindow(QWidget *parent = 0);
     ~CMainWindow();
 
