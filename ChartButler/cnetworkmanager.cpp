@@ -24,7 +24,6 @@
 *   CNetworkManager regelt den kompletten Datenverkehr mit dem GAT24.de-Server.
 *
 *****************************************************************************************/
-/* TODO: Liste der neu geladenen Karten erstellen und nach Beendigung ausgeben */
 
 #include "cnetworkmanager.h"
 #include "coptions.h"
@@ -180,8 +179,8 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
 
     if(lcontent == "application/x-download")
     {
-        if(m_action == ACT_NEW)
-        {
+        /*if(m_action == ACT_NEW)
+        {*/
             QFile* lChartFile = new QFile();
             QString lAttachment(pReply->rawHeader("Content-Disposition"));
             QString lLimiter("\"");
@@ -200,7 +199,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             storeChartInDb(&lFileName, &lCFPath);
             m_newCharts->append(lCFPath);
             emit chartDlFinished();
-        }        
+        /*}*/
     }
 
     if(ldlData.contains("cbver"))
@@ -290,15 +289,21 @@ void CNetworkManager::onChartDlFinished()
 
 void CNetworkManager::dlNextField()
 {    
+    CMainWindow* lParent = (CMainWindow*) m_parent;
     if(m_fieldInSequence < m_fieldList->count())
     {
         m_ICAO = m_fieldList->at(m_fieldInSequence);
+        lParent->m_AmendedFields->append(m_ICAO);
         QString lUrlString(ICAOURL);
         lUrlString.append(m_ICAO);
         lUrlString.append("&SID=");
         lUrlString.append(m_sid);
         QUrl lUrl(lUrlString);
         downloadData(&lUrl);
+    }
+    else
+    {
+        lParent->markAmmendedFields();
     }
     m_fieldInSequence++;
 }
@@ -421,8 +426,7 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
                 if(lchart->Date < m_lastAmmended)
                 {
                     lState = "...wird erneuert!";                    
-                    m_fieldList->append(lFld->IACO);
-                    lparent->m_AmendedFields->append(lFld->IACO);
+                    m_fieldList->append(lFld->IACO);                    
                 }
                 else
                 {
@@ -441,8 +445,7 @@ QList<CDatabaseManager::s_Field>* CNetworkManager::GetAmendedFieldsList()
         lFld->Name = lFldDef->text;
         lFldList->append(*lFld);
         lLastPos = lFldDef->pos;
-    }
-    lparent->markAmmendedFields();
+    }    
     getChartFromList();
     return lFldList;
 }

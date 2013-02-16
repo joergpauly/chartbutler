@@ -175,15 +175,21 @@ void CDatabaseManager::AddChart(int p_FID, QString p_name, QString p_path, QDate
     qryCharts->first();
     if(qryCharts->isValid())
     {
-        // We got it. Nothing to do.
-        return;
+        // We got it. Let's update it
+        int Id = qryCharts->value("ID").toInt();
+        qryCharts->prepare("UPDATE Charts SET Date = :CDATE WHERE ID = :ID");
+        qryCharts->bindValue(":CDATE",p_date);
+        qryCharts->bindValue(":ID", Id);
     }
-    // It's a new one, so add it.
-    qryCharts->prepare("INSERT INTO Charts (FID, CName, CPath, Date) VALUES (:FID, :CNAME, :CPATH, :CDATE)");
-    qryCharts->bindValue(":FID", p_FID);
-    qryCharts->bindValue(":CNAME", p_name);
-    qryCharts->bindValue(":CPATH", p_path);
-    qryCharts->bindValue(":CDATE", p_date);
+    else
+    {
+        // It's a new one, so add it.
+        qryCharts->prepare("INSERT INTO Charts (FID, CName, CPath, Date) VALUES (:FID, :CNAME, :CPATH, :CDATE)");
+        qryCharts->bindValue(":FID", p_FID);
+        qryCharts->bindValue(":CNAME", p_name);
+        qryCharts->bindValue(":CPATH", p_path);
+        qryCharts->bindValue(":CDATE", p_date);
+    }
     qryCharts->exec();
 }
 

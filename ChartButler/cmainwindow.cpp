@@ -221,6 +221,7 @@ void CMainWindow::markAmmendedFields()
         QTreeWidgetItem* item = ui->trvCharts->findItems(m_AmendedFields->at(i).toUtf8(),Qt::MatchStartsWith,0).at(0);
         QFont fnt = item->font(0);
         fnt.setBold(true);
+        fnt.setItalic(true);
         item->setFont(0, fnt);
     }
 }
@@ -235,6 +236,7 @@ void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int colu
     QString lFname(item->data(0, Qt::UserRole).toString());
     QFont fnt = item->font(0);
     fnt.setBold(false);
+    fnt.setItalic(false);
     item->setFont(0, fnt);
     if(lFname.right(4).toLower() == ".pdf")
     {

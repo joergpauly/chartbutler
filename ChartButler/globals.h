@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -35,7 +35,7 @@
 // Version
 #define MAJOR 2
 #define MINOR 1
-#define REV   55
+#define REV   71
 
 // Server-URLs
 #define LOGINURL "http://www.gat24.de/data.php?rubrik=aktuell&unterrubrik=neues&dokument=neues&SID=0"
