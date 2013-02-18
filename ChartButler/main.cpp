@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     CMainWindow w;
     w.show();
+    a.addLibraryPath(a.applicationDirPath());
 
     return a.exec();
 }
