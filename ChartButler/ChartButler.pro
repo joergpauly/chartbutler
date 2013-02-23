@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ChartButler
 TEMPLATE = app
-VERSION = 2.1.55
+VERSION = 2.1.72
 
 SOURCES += main.cpp\
         cmainwindow.cpp \

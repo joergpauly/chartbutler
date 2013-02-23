@@ -1,4 +1,4 @@
-﻿/****************************************************************************************
+/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -24,6 +24,7 @@
 *   CNetworkManager regelt den kompletten Datenverkehr mit dem GAT24.de-Server.
 *
 *****************************************************************************************/
+
 
 #include "cnetworkmanager.h"
 #include "coptions.h"

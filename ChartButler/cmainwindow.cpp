@@ -1,4 +1,4 @@
-﻿/****************************************************************************************
+/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -179,6 +179,7 @@ void CMainWindow::SetupTree()
         item->setData(0,Qt::UserRole,fld->Path);
         // Get the charts for the field...
         mdb->BrowseCharts(fld->ID);
+
         // ...and put them into the tree
         do
         {
@@ -190,8 +191,11 @@ void CMainWindow::SetupTree()
             chld->setData(1, Qt::UserRole, crt->Date);
             item->addChild(chld);
         }while(mdb->NextChart());
+
         ui->trvCharts->addTopLevelItem(item);
+
     }while (mdb->NextField());
+
     QStringList lheaders;
     lheaders.append("Plätze/Karten");
     lheaders.append("Stand vom");
@@ -324,7 +328,7 @@ void CMainWindow::on_trvCharts_currentItemChanged(QTreeWidgetItem *current, QTre
 
 void CMainWindow::on_trvCharts_itemChanged(QTreeWidgetItem *item, int column)
 {
-
+  // TODO: Statusleiste nachführen!
 }
 
 void CMainWindow::on_cmdHelpInfo_clicked()
