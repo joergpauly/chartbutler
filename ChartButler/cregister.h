@@ -1,7 +1,10 @@
-#ifndef CREGISTER_H
+﻿#ifndef CREGISTER_H
 #define CREGISTER_H
 
 #include <QDialog>
+#include <QSettings>
+
+#include "globals.h"
 
 namespace Ui {
   class CRegister;
@@ -15,8 +18,12 @@ public:
   explicit CRegister(QWidget *parent = 0);
   ~CRegister();
   
+private slots:
+    void on_buttonBox_accepted();
+
 private:
   Ui::CRegister *ui;
+  QSettings* settings;
 };
 
 #endif // CREGISTER_H

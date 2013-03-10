@@ -52,6 +52,7 @@
 #include "cdatabasemanager.h"
 #include "coptions.h"
 #include "chelp.h"
+#include "cregister.h"
 
 namespace Ui
 {
@@ -66,13 +67,15 @@ class CMainWindow : public QMainWindow
 private:
     CDatabaseManager *mdb;
     CNetworkManager *mnet;
+    CRegister *mreg;
     COptions *mopt;    
     QMouseEvent* m_lastMouseEvent;
     QMenu *m_contextMenu;
     QAction *m_actRemove;
     QAction *m_actUpdate;
     QAction *m_actShowInReader;
-    QTreeWidgetItem* m_clickedItem;
+    QTreeWidgetItem *m_clickedItem;
+    QSettings *m_settings;
     bool m_networkReady;
 
 
@@ -91,6 +94,7 @@ public:
 
 private:
     void setupMenu();
+    bool checkRegistered();
 
 private slots:
     void on_cmdClose_clicked();
@@ -102,11 +106,8 @@ private slots:
     void on_actShow();
     void on_actUpdate();
     void on_trvCharts_itemChanged(QTreeWidgetItem *item, int column);
-
     void on_trvCharts_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
-
     void on_cmdHelpInfo_clicked();
-
     void on_cmdGat24_clicked();
 
 private:

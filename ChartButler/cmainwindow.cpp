@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -36,8 +36,14 @@ CMainWindow::CMainWindow(QWidget *parent) :
     mdb = new CDatabaseManager(this);
     mnet = new CNetworkManager(this);
     mopt = new COptions(this);    
+    mreg = new CRegister(this);
     setupMenu();
     SetupTree();
+    m_settings = new QSettings(gCOMPANY, gAPP);
+    if(!checkRegistered())
+    {
+        //TODO: Registrierungsmaske aufrufen.
+    }
 }
 
 CMainWindow::~CMainWindow()
@@ -63,6 +69,12 @@ void CMainWindow::setupMenu()
     connect(m_actRemove,SIGNAL(triggered()),this,SLOT(on_actRemove()));
     connect(m_actShowInReader,SIGNAL(triggered()),this,SLOT(on_actShow()));
     connect(m_actUpdate,SIGNAL(triggered()),this,SLOT(on_actUpdate()));
+}
+
+bool CMainWindow::checkRegistered()
+{
+    //TODO: Check, ob registriert oder die Registrierung abgelehnt wurde.
+    return true;
 }
 
 void CMainWindow::on_cmdClose_clicked()
