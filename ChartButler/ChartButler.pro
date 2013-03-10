@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     coptions.cpp \
     cnetworkmanager.cpp \
     cstatus.cpp \
-    chelp.cpp
+    chelp.cpp \
+    cregister.cpp
 
 
 HEADERS  += cmainwindow.h \
@@ -27,13 +28,15 @@ HEADERS  += cmainwindow.h \
     globals.h \
     cnetworkmanager.h \
     cstatus.h \
-    chelp.h
+    chelp.h \
+    cregister.h
 
 
 FORMS    += cmainwindow.ui \
     coptions.ui \
     cstatus.ui \
-    chelp.ui
+    chelp.ui \
+    cregister.ui
 
 RESOURCES += \
     cbRessources.qrc
