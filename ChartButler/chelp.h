@@ -1,7 +1,9 @@
-#ifndef CHELP_H
+﻿#ifndef CHELP_H
 #define CHELP_H
 
 #include <QtWidgets/QDialog>
+#include <QSettings>
+#include "globals.h"
 
 namespace Ui {
 class CHelp;

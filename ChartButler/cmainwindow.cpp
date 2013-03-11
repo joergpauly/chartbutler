@@ -42,7 +42,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_settings = new QSettings(gCOMPANY, gAPP);
     if(!checkRegistered())
     {
-        //TODO: Registrierungsmaske aufrufen.
+        //Registrierungsmaske aufrufen.
+        mreg->exec();
     }
 }
 
@@ -74,7 +75,8 @@ void CMainWindow::setupMenu()
 bool CMainWindow::checkRegistered()
 {
     //TODO: Check, ob registriert oder die Registrierung abgelehnt wurde.
-    return true;
+    QSettings *settings = new QSettings(gCOMPANY, gAPP);
+    return settings->value("nomoreRegister", false).toBool();
 }
 
 void CMainWindow::on_cmdClose_clicked()
@@ -340,7 +342,7 @@ void CMainWindow::on_trvCharts_currentItemChanged(QTreeWidgetItem *current, QTre
 
 void CMainWindow::on_trvCharts_itemChanged(QTreeWidgetItem *item, int column)
 {
-  // TODO: Statusleiste nachführen!
+  // TODO: Statusleiste nachfuehren!
 }
 
 void CMainWindow::on_cmdHelpInfo_clicked()

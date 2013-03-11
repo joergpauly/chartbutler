@@ -18,5 +18,13 @@ void CRegister::on_buttonBox_accepted()
 {
     settings->setValue("userMail", ui->txtEmail->text());
     settings->setValue("userName", ui->txtName->text());
+    settings->setValue("nomoreRegister",true);
     //TODO: Senden der Registrierung implementieren!
+}
+
+void CRegister::on_buttonBox_rejected()
+{
+    settings->setValue("userMail", "Unregistriert");
+    settings->setValue("userName", "");
+    settings->setValue("nomoreRegister",true);
 }
