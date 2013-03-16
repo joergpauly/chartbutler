@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -103,6 +103,36 @@ void CNetworkManager::getChartFromList()
     m_newCharts = new QList<QString>();
     m_fieldInSequence = 0;
     dlNextField();
+}
+
+bool CNetworkManager::sendRegistration()
+{
+    QFile* regFile = new QFile("http://www.megamover.de/cbreg.txt");
+    if(regFile->open(QIODevice::Append))
+    {
+        QSettings* settings = new QSettings(gCOMPANY, gAPP);
+        QByteArray regLine;
+        regLine = settings->value("userMail").toByteArray();
+        regLine.append(";");
+        regLine.append(settings->value("userName").toByteArray());
+        regFile->write(regLine);
+        regFile->flush();
+        regFile->close();
+        delete regFile;
+        delete settings;
+        return true;
+    }
+    else
+    {
+        QMessageBox* msg = new QMessageBox((QWidget*)this);
+        msg->setWindowTitle("Fehler bei der Registrierung");
+        msg->setText("Die Übermittlung der Registrierung schlug fehl!");
+        msg->setInformativeText("Beim Zugriff auf den Registrierungs-Server\nist ein Fehler aufgetreten.\n\nBitte versuchen Sie es später erneut.");
+        msg->setIcon(QMessageBox::Critical);
+        msg->setStandardButtons(QMessageBox::Ok);
+        msg->exec();
+        return false;
+    }
 }
 
 void CNetworkManager::downloadData(QUrl* pUrl, bool pShowState)
@@ -577,3 +607,4 @@ void CNetworkManager::checkForUpdate()
     QUrl lUrl("http://www.megamover.de/downloads/cb/version.txt");
     downloadData(&lUrl);
 }
+

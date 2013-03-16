@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QSettings>
 
+#include "cnetworkmanager.h"
 #include "globals.h"
 
 namespace Ui {

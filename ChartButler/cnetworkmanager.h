@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -55,7 +55,7 @@ public:
     void updateField(QString* pICAO);
     void getChart(QString* pICAO);
     void getChartFromList();
-
+    bool sendRegistration();
 
 private:
     QObject* m_parent;

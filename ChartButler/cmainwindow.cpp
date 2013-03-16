@@ -43,7 +43,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     if(!checkRegistered())
     {
         //Registrierungsmaske aufrufen.
-        mreg->exec();
+        mreg->show();
     }
 }
 
@@ -53,6 +53,7 @@ CMainWindow::~CMainWindow()
     delete mdb;
     delete mnet;
     delete mopt;
+    delete mreg;
 }
 
 void CMainWindow::setupMenu()

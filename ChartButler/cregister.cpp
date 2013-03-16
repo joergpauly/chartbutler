@@ -19,7 +19,11 @@ void CRegister::on_buttonBox_accepted()
     settings->setValue("userMail", ui->txtEmail->text());
     settings->setValue("userName", ui->txtName->text());
     settings->setValue("nomoreRegister",true);
-    //TODO: Senden der Registrierung implementieren!
+    CNetworkManager* lnet = new CNetworkManager();
+    if(!lnet->sendRegistration())
+    {
+        settings->setValue("nomoreRegister", false);
+    }
 }
 
 void CRegister::on_buttonBox_rejected()
