@@ -1,4 +1,4 @@
-﻿#include "cregister.h"
+#include "cregister.h"
 #include "ui_cregister.h"
 
 CRegister::CRegister(QWidget *parent) :
@@ -18,11 +18,11 @@ void CRegister::on_buttonBox_accepted()
 {
     settings->setValue("userMail", ui->txtEmail->text());
     settings->setValue("userName", ui->txtName->text());
-    settings->setValue("nomoreRegister",true);
+    settings->setValue("nomoreRegister",false);
     CNetworkManager* lnet = new CNetworkManager();
-    if(!lnet->sendRegistration())
+    if(lnet->sendRegistration())
     {
-        settings->setValue("nomoreRegister", false);
+        settings->setValue("nomoreRegister", true);
     }
 }
 
