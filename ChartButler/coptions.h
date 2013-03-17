@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -51,7 +51,7 @@ class COptions : public QDialog
 
 private:
      Ui::COptions *ui;
-     QSettings* settings;
+     QSettings* m_settings;
      CDatabaseManager* mdb;
      QObject* m_parent;
 
@@ -61,6 +61,7 @@ public:
      QString pw();
      QString chartPath();
      QString pdfExe();
+     QSettings* settings();
 
 signals:
 

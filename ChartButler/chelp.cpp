@@ -1,4 +1,4 @@
-#include "chelp.h"
+﻿#include "chelp.h"
 #include "ui_chelp.h"
 
 CHelp::CHelp(QWidget *parent) :
@@ -22,9 +22,8 @@ CHelp::CHelp(QWidget *parent) :
     {
         lAbout.append("Dieses Programm ist registriert für:\n");
         lAbout.append(lsettings->value("userName").toString());
-        lAbout.append("  \<");
-        lAbout.append(lsettings->value("userMail").toString());
-        lAbout.append("\>");
+        lAbout.append(" - ");
+        lAbout.append(lsettings->value("userMail").toString());        
         lAbout.append("\n\n");
 
     }

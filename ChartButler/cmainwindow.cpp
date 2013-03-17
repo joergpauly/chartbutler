@@ -35,16 +35,21 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->setupUi(this);
     mdb = new CDatabaseManager(this);
     mnet = new CNetworkManager(this);
-    mopt = new COptions(this);    
-    mreg = new CRegister(this);
+    mopt = new COptions(this);        
     setupMenu();
     SetupTree();
-    m_settings = new QSettings(gCOMPANY, gAPP);
+    m_settings = mopt->settings();
     if(!checkRegistered())
     {
         //Registrierungsmaske aufrufen.
-        mreg->show();
+        CRegister lreg(this);
+        lreg.exec();
     }
+}
+
+QSettings *CMainWindow::settings()
+{
+    return m_settings;
 }
 
 CMainWindow::~CMainWindow()
@@ -53,7 +58,6 @@ CMainWindow::~CMainWindow()
     delete mdb;
     delete mnet;
     delete mopt;
-    delete mreg;
 }
 
 void CMainWindow::setupMenu()

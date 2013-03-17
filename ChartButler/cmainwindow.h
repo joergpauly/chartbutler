@@ -67,7 +67,6 @@ class CMainWindow : public QMainWindow
 private:
     CDatabaseManager *mdb;
     CNetworkManager *mnet;
-    CRegister *mreg;
     COptions *mopt;    
     QMouseEvent* m_lastMouseEvent;
     QMenu *m_contextMenu;
@@ -88,6 +87,7 @@ public:
     void nextField();
     void markAmmendedFields();
     explicit CMainWindow(QWidget *parent = 0);
+    QSettings* settings();
     ~CMainWindow();
 
 // Private Member

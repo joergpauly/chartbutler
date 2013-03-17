@@ -1,4 +1,4 @@
-/****************************************************************************************
+﻿/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
 *   Copyright (C) 2012 Joerg Pauly
@@ -46,16 +46,16 @@ COptions::COptions(QWidget *parent) :
     mdb = l_Parent->GetDBman();
 
     // We just need to instantiate QSettings, as it is reentrant.
-    settings = new QSettings(gCOMPANY, gAPP);
+    m_settings = new QSettings(gCOMPANY, gAPP);
 
     // Set up the GUI...
     ui->setupUi(this);
 
     // ...and feed it!
-    ui->txtChartPath->setText(settings->value("ChartPath").toString());
-    ui->txtUserName->setText(settings->value("UID").toString());
-    ui->txtPassword->setText(settings->value("PW").toString());
-    ui->txtPdfExePath->setText(settings->value("PDFexe").toString());
+    ui->txtChartPath->setText(m_settings->value("ChartPath").toString());
+    ui->txtUserName->setText(m_settings->value("UID").toString());
+    ui->txtPassword->setText(m_settings->value("PW").toString());
+    ui->txtPdfExePath->setText(m_settings->value("PDFexe").toString());
 }
 
 
@@ -80,13 +80,13 @@ void COptions::on_buttonBox_accepted()
     // Show the Wait Cursor
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     // Write the value to the settings storage, where ever it is...
-    settings->setValue("ChartPath", ui->txtChartPath->text());
-    settings->setValue("UID", ui->txtUserName->text());
-    settings->setValue("PW",ui->txtPassword->text());
-    settings->setValue("PDFexe",ui->txtPdfExePath->text());
+    m_settings->setValue("ChartPath", ui->txtChartPath->text());
+    m_settings->setValue("UID", ui->txtUserName->text());
+    m_settings->setValue("PW",ui->txtPassword->text());
+    m_settings->setValue("PDFexe",ui->txtPdfExePath->text());
 
     // Get all subdir's names...
-    QDir* basedir = new QDir(settings->value("ChartPath").toString());
+    QDir* basedir = new QDir(m_settings->value("ChartPath").toString());
     QStringList dirlist = basedir->entryList();
 
     // Iterate and parse them...
@@ -146,20 +146,25 @@ void COptions::on_cmdBrowsePdf_clicked()
 
 QString COptions::uid()
 {
-    return settings->value("UID").toString();
+    return m_settings->value("UID").toString();
 }
 
 QString COptions::pw()
 {
-    return settings->value("PW").toString();
+    return m_settings->value("PW").toString();
 }
 
 QString COptions::chartPath()
 {
-    return settings->value("ChartPath").toString();
+    return m_settings->value("ChartPath").toString();
 }
 
 QString COptions::pdfExe()
 {
-    return settings->value("PDFexe").toString();
+    return m_settings->value("PDFexe").toString();
+}
+
+QSettings *COptions::settings()
+{
+    return m_settings;
 }

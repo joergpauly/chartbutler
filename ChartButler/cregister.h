@@ -25,7 +25,7 @@ private slots:
 
 private:
   Ui::CRegister *ui;
-  QSettings* settings;
+  QSettings* m_settings;
 };
 
 #endif // CREGISTER_H
