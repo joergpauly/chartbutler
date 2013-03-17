@@ -93,9 +93,9 @@ p, li { white-space: pre-wrap; }
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QLabel" name="txtAbout">
-         <property name="text">
-          <string>to be replaced at runtime</string>
+        <widget class="QTextEdit" name="txtAbout">
+         <property name="readOnly">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

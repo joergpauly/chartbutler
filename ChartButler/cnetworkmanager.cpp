@@ -124,7 +124,7 @@ bool CNetworkManager::sendRegistration()
     }
     else
     {
-        QMessageBox* msg = new QMessageBox((QWidget*)this);
+        QMessageBox* msg = new QMessageBox();
         msg->setWindowTitle("Fehler bei der Registrierung");
         msg->setText("Die Übermittlung der Registrierung schlug fehl!");
         msg->setInformativeText("Beim Zugriff auf den Registrierungs-Server\nist ein Fehler aufgetreten.\n\nBitte versuchen Sie es später erneut.");

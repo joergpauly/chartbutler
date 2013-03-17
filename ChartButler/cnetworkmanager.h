@@ -41,6 +41,7 @@
 #include <QList>
 #include <QDate>
 #include <QtWidgets/QProgressDialog>
+#include <QMessageBox>
 #include "cdatabasemanager.h"
 
 #define ACT_NEW 0

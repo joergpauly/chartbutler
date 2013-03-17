@@ -78,10 +78,8 @@ void CMainWindow::setupMenu()
 }
 
 bool CMainWindow::checkRegistered()
-{
-    //TODO: Check, ob registriert oder die Registrierung abgelehnt wurde.
-    QSettings *settings = new QSettings(gCOMPANY, gAPP);
-    return settings->value("nomoreRegister", false).toBool();
+{    
+    return m_settings->value("nomoreRegister", false).toBool();
 }
 
 void CMainWindow::on_cmdClose_clicked()
