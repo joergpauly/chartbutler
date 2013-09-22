@@ -39,6 +39,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     setupMenu();
     SetupTree();
     m_settings = mopt->settings();
+    m_AmendedFields = new QList<QString>();
     if(!checkRegistered())
     {
         //Registrierungsmaske aufrufen.

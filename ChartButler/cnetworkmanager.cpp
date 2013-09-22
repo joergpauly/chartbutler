@@ -69,6 +69,16 @@ void CNetworkManager::updateCharts()
     downloadData(&lUrl);
 }
 
+void CNetworkManager::updateCharts(bool pTimeStamp)
+{
+    CDatabaseManager* ldbman = ((CMainWindow*)m_parent)->GetDBman();
+    ldbman->BrowseFields();
+    while(ldbman->qryFields->isValid())
+    {
+        getChart(ldbman->s_Field.IACO);
+    }
+}
+
 void CNetworkManager::updateField(QString *pICAO)
 {
     m_action = ACT_UPD;
@@ -218,6 +228,7 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             QString lAttachment(pReply->rawHeader("Content-Disposition"));
             QString lLimiter("\"");
             QString lFileName(getTextBetween(&lAttachment, &lLimiter, &lLimiter, 0)->text);            
+            QString lFdate(pReply->rawHeader("Last-Modified"));
             QString lCFPath(m_FieldDir);
             if(lCFPath.right(1) != "/")
             {
@@ -229,7 +240,8 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             lChartFile->write(m_dlData);
             lChartFile->flush();
             lChartFile->close();
-            storeChartInDb(&lFileName, &lCFPath);
+            QDate *lDate = fromHTMLDate(lFdate);
+            storeChartInDb(&lFileName, &lCFPath, lDate);
             m_newCharts->append(lCFPath);
             emit chartDlFinished();
         /*}*/
@@ -564,11 +576,11 @@ void CNetworkManager::getFieldName(QString *pStream)
     }
 }
 
-void CNetworkManager::storeChartInDb(QString* pFileName, QString* pPath)
+void CNetworkManager::storeChartInDb(QString* pFileName, QString* pPath, QDate *pDate)
 {
     CMainWindow* lparent = (CMainWindow*)m_parent;
     CDatabaseManager* ldbman = lparent->GetDBman();
-    ldbman->AddChart(m_FID, *pFileName, *pPath, QDate::currentDate());
+    ldbman->AddChart(m_FID, *pFileName, *pPath, *pDate);
     lparent->SetupTree();
 }
 
@@ -606,5 +618,58 @@ void CNetworkManager::checkForUpdate()
 {
     QUrl lUrl("http://www.megamover.de/downloads/cb/version.txt");
     downloadData(&lUrl);
+}
+
+QDate *CNetworkManager::fromHTMLDate(QString pHTMLtag)
+{
+    QDate* lDate = new QDate();
+    int d;
+    int m;
+    int y;
+
+    pHTMLtag = pHTMLtag.left(pHTMLtag.length() - 13);
+    pHTMLtag = pHTMLtag.right(pHTMLtag.length() - 5);
+    d = pHTMLtag.left(2).toInt();
+    y = pHTMLtag.right(4).toInt();
+    QString lTag(pHTMLtag.mid(3,3));
+
+    if(lTag == "Jan")
+        m = 1;
+
+    if(lTag == "Feb")
+        m = 2;
+
+    if(lTag == "Mar")
+        m = 3;
+
+    if(lTag == "Apr")
+        m = 4;
+
+    if(lTag == "May")
+        m = 5;
+
+    if(lTag == "Jun")
+        m = 6;
+
+    if(lTag == "Jul")
+        m = 7;
+
+    if(lTag == "Aug")
+        m = 8;
+
+    if(lTag == "Sep")
+        m = 9;
+
+    if(lTag == "Oct")
+        m = 10;
+
+    if(lTag == "Nov")
+        m = 11;
+
+    if(lTag == "Dec")
+        m = 12;
+
+    lDate->setDate(y,m,d);
+    return lDate;
 }
 

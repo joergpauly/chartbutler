@@ -44,6 +44,7 @@
 #include <QMessageBox>
 #include "cdatabasemanager.h"
 
+
 #define ACT_NEW 0
 #define ACT_UPD 1
 
@@ -53,6 +54,7 @@ class CNetworkManager : public QObject
 public:
     explicit CNetworkManager(QObject *parent = 0);
     void updateCharts();
+    void updateCharts(bool pTimeStamp);
     void updateField(QString* pICAO);
     void getChart(QString* pICAO);
     void getChartFromList();
@@ -97,9 +99,10 @@ private:
     txtPos *getTextAfter(QString* pSource, QString* pStart, int pLen, int pStartPos);
     QStringList* getLinkList(QString* pStream);
     void getFieldName(QString* pStream);
-    void storeChartInDb(QString *pFileName, QString *pPath);
+    void storeChartInDb(QString *pFileName, QString *pPath, QDate *pDate);
     QList<QString> *parseFields(QString pICAO);
     void checkForUpdate();
+    QDate* fromHTMLDate(QString pHTMLtag);
 
 public slots:
     void dlFinished(QNetworkReply* pReply);

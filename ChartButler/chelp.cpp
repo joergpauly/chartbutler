@@ -27,8 +27,8 @@ CHelp::CHelp(QWidget *parent) :
         lAbout.append("\n\n");
 
     }
-    ui->txtAbout->setText(lAbout);
     ui->setupUi(this);
+    ui->txtAbout->setText(lAbout);    
 }
 
 CHelp::~CHelp()
