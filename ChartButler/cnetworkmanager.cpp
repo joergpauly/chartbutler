@@ -75,7 +75,7 @@ void CNetworkManager::updateCharts(bool pTimeStamp)
     ldbman->BrowseFields();
     while(ldbman->qryFields->isValid())
     {
-        getChart(ldbman->s_Field.IACO);
+
     }
 }
 

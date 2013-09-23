@@ -12,7 +12,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ChartButler (C) 2012 Joerg Pauly</string>
+   <string>ChartButler (c) 2012-2013 J. Pauly</string>
   </property>
   <property name="windowIcon">
    <iconset resource="cbRessources.qrc">
