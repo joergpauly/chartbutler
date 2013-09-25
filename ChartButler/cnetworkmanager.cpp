@@ -71,11 +71,14 @@ void CNetworkManager::updateCharts()
 
 void CNetworkManager::updateCharts(bool pTimeStamp)
 {
+    m_action = ACT_UPD;
     CDatabaseManager* ldbman = ((CMainWindow*)m_parent)->GetDBman();
     ldbman->BrowseFields();
     while(ldbman->qryFields->isValid())
     {
-
+        QString *lICAO = &(ldbman->getFirstField()->IACO);
+        getFieldPage(lICAO);
+        ldbman->NextField();
     }
 }
 
@@ -113,6 +116,16 @@ void CNetworkManager::getChartFromList()
     m_newCharts = new QList<QString>();
     m_fieldInSequence = 0;
     dlNextField();
+}
+
+void CNetworkManager::getFieldPage(QString *pICAO)
+{
+    QString lUrlString(ICAOURL);
+    lUrlString.append(pICAO);
+    lUrlString.append("&SID=");
+    lUrlString.append(m_sid);
+    QUrl lUrl(lUrlString);
+    downloadData(&lUrl);
 }
 
 bool CNetworkManager::sendRegistration()
@@ -222,19 +235,20 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
 
     if(lcontent == "application/x-download")
     {
-        /*if(m_action == ACT_NEW)
-        {*/
-            QFile* lChartFile = new QFile();
-            QString lAttachment(pReply->rawHeader("Content-Disposition"));
-            QString lLimiter("\"");
-            QString lFileName(getTextBetween(&lAttachment, &lLimiter, &lLimiter, 0)->text);            
-            QString lFdate(pReply->rawHeader("Last-Modified"));
+        QString lAttachment(pReply->rawHeader("Content-Disposition"));
+        QString lLimiter("\"");
+        QString lFileName(getTextBetween(&lAttachment, &lLimiter, &lLimiter, 0)->text);
+        QString lFdate(pReply->rawHeader("Last-Modified"));
+
+        if(m_action == ACT_NEW)
+        {
             QString lCFPath(m_FieldDir);
             if(lCFPath.right(1) != "/")
             {
                 lCFPath.append("/");
             }
             lCFPath.append(lFileName);
+            QFile* lChartFile = new QFile();
             lChartFile->setFileName(lCFPath);
             lChartFile->open(QFile::WriteOnly);
             lChartFile->write(m_dlData);
@@ -243,8 +257,14 @@ void CNetworkManager::dlFinished(QNetworkReply* pReply)
             QDate *lDate = fromHTMLDate(lFdate);
             storeChartInDb(&lFileName, &lCFPath, lDate);
             m_newCharts->append(lCFPath);
-            emit chartDlFinished();
-        /*}*/
+
+        }
+        else if(m_action == ACT_UPD)
+        {
+            //TODO: Name und Datum abgleichen
+        }
+
+        emit chartDlFinished();
     }
 
     if(ldlData.contains("cbver"))
@@ -333,7 +353,19 @@ void CNetworkManager::onChartDlFinished()
 }
 
 void CNetworkManager::dlNextField()
-{    
+{
+    if(m_action == ACT_UPD)
+    {
+        CDatabaseManager *ldbman = ((CMainWindow*)m_parent)->GetDBman();
+        CDatabaseManager::s_Field* lfld = ldbman->getNextField();
+        QString lUrlString(ICAOURL);
+        lUrlString.append(lfld->IACO);
+        lUrlString.append("&SID=");
+        lUrlString.append(m_sid);
+        QUrl lUrl(lUrlString);
+        downloadData(&lUrl);
+        return;
+    }
     CMainWindow* lParent = (CMainWindow*) m_parent;
     if(m_fieldInSequence < m_fieldList->count())
     {

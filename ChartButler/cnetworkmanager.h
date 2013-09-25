@@ -58,6 +58,7 @@ public:
     void updateField(QString* pICAO);
     void getChart(QString* pICAO);
     void getChartFromList();
+    void getFieldPage(QString *pICAO);
     bool sendRegistration();
 
 private:

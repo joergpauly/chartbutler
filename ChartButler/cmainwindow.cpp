@@ -255,7 +255,7 @@ void CMainWindow::markAmmendedFields()
 
 void CMainWindow::on_cmdUpdate_clicked()
 {
-    mnet->updateCharts();
+    mnet->updateCharts(true);
 
     mdb->updateCharts();
 }

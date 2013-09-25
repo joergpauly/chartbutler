@@ -90,6 +90,8 @@ public:
 public:
     bool GetField(QString p_icao, s_Field* p_field);
     s_Field* GetActualField();
+    s_Field* getNextField();
+    s_Field* getFirstField();
     bool BrowseFields();
     int AddField(QString picao, QString pname, QString ppath);
     bool FirstField();

@@ -157,6 +157,28 @@ CDatabaseManager::s_Field* CDatabaseManager::GetActualField()
     return fld;
 }
 
+CDatabaseManager::s_Field *CDatabaseManager::getNextField()
+{
+    s_Field *fld = new s_Field();
+    qryFields->next();
+    fld->ID   = qryFields->value(qryFields->record().indexOf("ID")).toInt(),
+    fld->IACO = qryFields->value(qryFields->record().indexOf("ICAO")).toString();
+    fld->Name = qryFields->value(qryFields->record().indexOf("Name")).toString();
+    fld->Path = qryFields->value(qryFields->record().indexOf("Path")).toString();
+    return fld;
+}
+
+CDatabaseManager::s_Field *CDatabaseManager::getFirstField()
+{
+    s_Field *fld = new s_Field();
+    qryFields->first();
+    fld->ID   = qryFields->value(qryFields->record().indexOf("ID")).toInt(),
+    fld->IACO = qryFields->value(qryFields->record().indexOf("ICAO")).toString();
+    fld->Name = qryFields->value(qryFields->record().indexOf("Name")).toString();
+    fld->Path = qryFields->value(qryFields->record().indexOf("Path")).toString();
+    return fld;
+}
+
 
 // Wrappers for the field navigation
 bool CDatabaseManager::NextField()
