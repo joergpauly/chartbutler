@@ -27,11 +27,15 @@
 
 
 #include "cdatabasemanager.h"
+#include "cmainwindow.h"
+#include "cnetworkmanager.h"
 
 
 CDatabaseManager::CDatabaseManager(QObject *parent) :
     QObject(parent)
 {
+    // Save pointer of CMainWindow (as QObject)
+    m_parent = parent;
     /* Define & open db
      * if the file doesn't exist, it will be created and
      * populated with the table definitions
@@ -254,6 +258,33 @@ void CDatabaseManager::RemoveField(QString *pICAO)
     qryFields->prepare("DELETE FROM Fields WHERE ICAO = :ICAO");
     qryFields->bindValue(":ICAO",*pICAO);
     qryFields->exec();
+
+}
+
+void CDatabaseManager::updateCharts()
+{
+    // Get Pointer of the network
+    CNetworkManager* lnet = new CNetworkManager();
+    lnet = ((CMainWindow*)m_parent)->getNetworkMan();
+    if(!BrowseFields())
+    {
+        return;
+    }
+
+    //Iterate fields...
+    while(qryFields->isValid())
+    {
+        if(!BrowseCharts(qryFields->value("ID").toInt()))
+        {
+            return;
+        }
+
+        //and their charts.
+        while(qryCharts->isValid())
+        {
+
+        }
+    }
 
 }
 

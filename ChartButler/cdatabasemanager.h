@@ -52,6 +52,7 @@ class CDatabaseManager : public QObject
 // Member-Deklarationen
 private:
     QSqlDatabase    m_db;
+    QObject* m_parent;
 
 
 
@@ -101,6 +102,8 @@ public:
     bool NextChart();
     bool PrevChart();
     void RemoveField(QString* pICAO);
+    void updateCharts();
+
 
 
 

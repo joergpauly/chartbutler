@@ -179,6 +179,11 @@ CDatabaseManager* CMainWindow::GetDBman()
     return mdb;
 }
 
+CNetworkManager *CMainWindow::getNetworkMan()
+{
+    return mnet;
+}
+
 void CMainWindow::SetupTree()
 {
     // Clear the tree...
@@ -251,6 +256,8 @@ void CMainWindow::markAmmendedFields()
 void CMainWindow::on_cmdUpdate_clicked()
 {
     mnet->updateCharts();
+
+    mdb->updateCharts();
 }
 
 void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int column)

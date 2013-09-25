@@ -82,6 +82,7 @@ private:
 public:
     QList<QString>* m_AmendedFields;
     CDatabaseManager *GetDBman();
+    CNetworkManager *getNetworkMan();
     void SetupTree();
     void updateField(QString* pICAO);
     void nextField();

@@ -8,11 +8,11 @@ CHelp::CHelp(QWidget *parent) :
     QSettings *lsettings = new QSettings(gCOMPANY, gAPP);
     QString lAbout;
     lAbout = "ChartButler V";
-    lAbout.append(MAJOR);
+    lAbout.append(QString("%1").arg(MAJOR));
     lAbout.append(".");
-    lAbout.append(MINOR);
+    lAbout.append(QString("%1").arg(MINOR));
     lAbout.append(".");
-    lAbout.append(REV);
+    lAbout.append(QString("%1").arg(REV));
     lAbout.append("\n\n");
     if(lsettings->value("userMail", "NIL")=="NIL")
     {
