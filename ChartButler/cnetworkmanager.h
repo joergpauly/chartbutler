@@ -52,14 +52,7 @@ class CNetworkManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit CNetworkManager(QObject *parent = 0);
-    void updateCharts();
-    void updateCharts(bool pTimeStamp);
-    void updateField(QString* pICAO);
-    void getChart(QString* pICAO);
-    void getChartFromList();
-    void getFieldPage(QString *pICAO);
-    bool sendRegistration();
+    explicit CNetworkManager(QObject *parent = 0);      
 
 private:
     QObject* m_parent;
@@ -92,10 +85,10 @@ private:
     };
 
     void getSID();
-    void downloadData(QUrl* pUrl, bool pShowState = false);
     void extractSID();
-    void getNewAirfield(QString* pICAO, QList<QString>* pLinkList);
-    QList<CDatabaseManager::s_Field>* GetAmendedFieldsList();
+    void downloadData(QUrl* pUrl, bool pShowState = false);
+
+
     txtPos *getTextBetween(QString* pSource, QString* pStart, QString* pEnd, int pStartPos);
     txtPos *getTextAfter(QString* pSource, QString* pStart, int pLen, int pStartPos);
     QStringList* getLinkList(QString* pStream);
@@ -106,10 +99,6 @@ private:
     QDate* fromHTMLDate(QString pHTMLtag);
 
 public slots:
-    void dlFinished(QNetworkReply* pReply);
-    void dlProgress(qint64 pRcvd, qint64 pTotal);
-    void onChartDlFinished();
-    void dlNextField();
 
 signals:
     void chartDlFinished();

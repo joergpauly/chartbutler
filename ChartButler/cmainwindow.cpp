@@ -257,7 +257,7 @@ void CMainWindow::on_cmdUpdate_clicked()
 {
     mnet->updateCharts(true);
 
-    mdb->updateCharts();
+    //mdb->updateCharts();
 }
 
 void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int column)
