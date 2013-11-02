@@ -16,7 +16,6 @@ SOURCES += main.cpp\
         cmainwindow.cpp \
     cdatabasemanager.cpp \
     coptions.cpp \
-    cnetworkmanager.cpp \
     cstatus.cpp \
     chelp.cpp \
     cregister.cpp
@@ -26,7 +25,6 @@ HEADERS  += cmainwindow.h \
     cdatabasemanager.h \
     coptions.h \
     globals.h \
-    cnetworkmanager.h \
     cstatus.h \
     chelp.h \
     cregister.h

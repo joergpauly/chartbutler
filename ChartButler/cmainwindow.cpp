@@ -161,7 +161,7 @@ void CMainWindow::on_cmdAdd_clicked()
     {
         QString icao;
         icao = inDlg->textValue().toUpper();        
-        mnet->getChart(&icao);
+        mnet->getNewChart(&icao);
     }
 
     // Aufräumen
