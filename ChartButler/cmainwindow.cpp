@@ -161,7 +161,8 @@ void CMainWindow::on_cmdAdd_clicked()
     {
         QString icao;
         icao = inDlg->textValue().toUpper();        
-        mnet->getNewChart(&icao);
+        QList<QString*> *lFields = parseFields(icao);
+        mnet->getNewAirfields(lFields);
     }
 
     // Aufräumen
@@ -232,7 +233,7 @@ void CMainWindow::updateField(QString *pICAO)
     mdb->GetField(lICAO,lfld);
     ui->trvCharts->setCurrentItem(0);
     mdb->RemoveField(&lfld->IACO);
-    mnet->getChart(&lICAO);
+    //mnet->getChart(&lICAO);
     SetupTree();
 }
 
@@ -255,9 +256,7 @@ void CMainWindow::markAmmendedFields()
 
 void CMainWindow::on_cmdUpdate_clicked()
 {
-    mnet->updateCharts(true);
-
-    //mdb->updateCharts();
+    //Vorhandene Karten auf Aktualisierung prüfen
 }
 
 void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int column)
@@ -319,7 +318,7 @@ void CMainWindow::on_actUpdate()
     mdb->GetField(lICAO,lfld);
     ui->trvCharts->setCurrentItem(0);
     mdb->RemoveField(&lfld->IACO);
-    mnet->getChart(&lICAO);
+    //mnet->getChart(&lICAO);
     SetupTree();
 }
 

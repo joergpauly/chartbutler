@@ -283,33 +283,6 @@ void CDatabaseManager::RemoveField(QString *pICAO)
 
 }
 
-void CDatabaseManager::updateCharts()
-{
-    // Get Pointer of the network
-    CNetworkManager* lnet = new CNetworkManager();
-    lnet = ((CMainWindow*)m_parent)->getNetworkMan();
-    if(!BrowseFields())
-    {
-        return;
-    }
-
-    //Iterate fields...
-    while(qryFields->isValid())
-    {
-        if(!BrowseCharts(qryFields->value("ID").toInt()))
-        {
-            return;
-        }
-
-        //and their charts.
-        while(qryCharts->isValid())
-        {
-
-        }
-    }
-
-}
-
 bool CDatabaseManager::FirstField()
 {
     return qryCharts->first();

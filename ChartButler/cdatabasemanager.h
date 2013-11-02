@@ -103,8 +103,7 @@ public:
     s_Chart* GetActualChart();
     bool NextChart();
     bool PrevChart();
-    void RemoveField(QString* pICAO);
-    void updateCharts();
+    void RemoveField(QString* pICAO);    
 
 
 

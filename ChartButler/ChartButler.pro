@@ -18,7 +18,9 @@ SOURCES += main.cpp\
     coptions.cpp \
     cstatus.cpp \
     chelp.cpp \
-    cregister.cpp
+    cregister.cpp \
+    cnetworkmanager.cpp \
+    cparser.cpp
 
 
 HEADERS  += cmainwindow.h \
@@ -27,7 +29,9 @@ HEADERS  += cmainwindow.h \
     globals.h \
     cstatus.h \
     chelp.h \
-    cregister.h
+    cregister.h \
+    cnetworkmanager.h \
+    cparser.h
 
 
 FORMS    += cmainwindow.ui \

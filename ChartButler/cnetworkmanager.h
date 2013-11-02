@@ -1,7 +1,8 @@
-﻿/****************************************************************************************
+/****************************************************************************************
 *
 *   This file is part of the ChartButler Project.
-*   Copyright (C) 2012 Joerg Pauly
+*   Copyright (C) 2013 Joerg Pauly
+*   Created 02.11.2013 by joerg
 *   All Rights reserved
 *
 *   ChartButler ist Freie Software: Sie können es unter den Bedingungen
@@ -18,16 +19,9 @@
 *   Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 *
 *****************************************************************************************/
-/*****************************************************************************************
-*
-*   CNetworkManager.h
-*   CNetworkManager regelt den kompletten Datenverkehr mit dem GAT24.de-Server.
-*
-*****************************************************************************************/
 
 #ifndef CNETWORKMANAGER_H
 #define CNETWORKMANAGER_H
-
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -43,6 +37,7 @@
 #include <QtWidgets/QProgressDialog>
 #include <QMessageBox>
 #include "cdatabasemanager.h"
+#include "cparser.h"
 
 
 #define ACT_NEW 0
@@ -51,59 +46,47 @@
 class CNetworkManager : public QObject
 {
     Q_OBJECT
-public:
-    explicit CNetworkManager(QObject *parent = 0);      
+
 
 private:
-    QObject* m_parent;
+    //Private Member
+    QObject *m_parent;
     QString m_uid;
     QString m_pw;
     QString m_sid;
-    QString m_ICAO;
-    QString m_FieldName;
+    QString *m_ICAO;
+    QString *m_FieldName;
     QString m_FieldDir;
-    QDate   m_lastAmmended;
-    int     m_action;
-    int     m_FID;
-    QByteArray m_dlData;
+    int m_FID;
+    QList<QString*> *m_LinkList;
     QNetworkAccessManager m_nam;
     QNetworkRequest m_request;
-    QList<QString> *m_fieldList;
-    QList<QString> *m_newCharts;
-    QProgressDialog* m_dlProgress;
-    bool m_lastRetrieve;
-    bool m_nextField;
-    int m_chartInSequence;
-    int m_chartsToLoad;
-    int m_fieldInSequence;
-    QList<QString> *m_linkList;
+    CParser m_parser;
+    int m_ReplyType;
 
-    struct txtPos
+    enum ReplyType //WAS haben wir angefordert?
     {
-        QString text;
-        int     pos;
+        LoginPage,
+        SidReply,
+        AirfieldChartLinkList,
+        PDFdoc,
+        AppVersion
     };
 
+    //Private Funktionen
     void getSID();
-    void extractSID();
-    void downloadData(QUrl* pUrl, bool pShowState = false);
+    void extractSID(QString *pStream);
+    void getChartsForNewField(QString *pIcao);
+    void getLinkList(QString *pStream);
+    void getFieldName(QString *pStream);
+    void storeAirfieldInDB();
 
+public:
+    explicit CNetworkManager(QObject *parent = 0);
+    void getNewAirfields(QList<QString *> *pList);
 
-    txtPos *getTextBetween(QString* pSource, QString* pStart, QString* pEnd, int pStartPos);
-    txtPos *getTextAfter(QString* pSource, QString* pStart, int pLen, int pStartPos);
-    QStringList* getLinkList(QString* pStream);
-    void getFieldName(QString* pStream);
-    void storeChartInDb(QString *pFileName, QString *pPath, QDate *pDate);
-    QList<QString> *parseFields(QString pICAO);
-    void checkForUpdate();
-    QDate* fromHTMLDate(QString pHTMLtag);
-
-public slots:
-
-signals:
-    void chartDlFinished();
-    void fieldDlFinished();
-
+private slots:
+    void downloadFinished(QNetworkReply *pReply);
 };
 
 #endif // CNETWORKMANAGER_H

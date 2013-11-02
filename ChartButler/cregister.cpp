@@ -23,10 +23,10 @@ void CRegister::on_buttonBox_accepted()
     m_settings->setValue("userName", ui->txtName->text());
     m_settings->setValue("nomoreRegister",false);
     CNetworkManager* lnet = new CNetworkManager();
-    if(lnet->sendRegistration())
+    /*if(lnet->sendRegistration())
     {
         m_settings->setValue("nomoreRegister", true);
-    }
+    }*/
 }
 
 void CRegister::on_buttonBox_rejected()
