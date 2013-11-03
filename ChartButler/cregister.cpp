@@ -31,7 +31,7 @@ void CRegister::on_buttonBox_accepted()
 
 void CRegister::on_buttonBox_rejected()
 {
-    m_settings->setValue("userMail", "Unregistriert");
+    m_settings->setValue("userMail", "");
     m_settings->setValue("userName", "");
     m_settings->setValue("nomoreRegister",true);
 }
