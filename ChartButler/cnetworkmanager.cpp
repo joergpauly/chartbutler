@@ -66,7 +66,7 @@ void CNetworkManager::getSID()
 void CNetworkManager::getNewAirfields(QList<QString*> *pList)
 {
     //Es sollen neue Flugplätze geladen werden.
-    for(int i = 0; i < pList->count(); i++)
+    for(int i = 0; i <= pList->count(); i++)
     {
         getChartsForNewField(pList->at(i));
     }
