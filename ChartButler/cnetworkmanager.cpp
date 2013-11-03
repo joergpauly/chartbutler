@@ -122,7 +122,6 @@ void CNetworkManager::downloadFinished(QNetworkReply *pReply)
 
 void CNetworkManager::extractSID(QString *pStream)
 {
-
     QString lStart("SID=");
     QString lEnd("\">Mitglied");
     m_sid = m_parser.getTextBetween(pStream, &lStart, &lEnd, 0)->text;
