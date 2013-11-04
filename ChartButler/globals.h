@@ -34,8 +34,8 @@
 
 // Version
 #define MAJOR 2
-#define MINOR 1
-#define REV   87
+#define MINOR 2
+#define REV   96
 
 // Server-URLs
 #define LOGINURL "http://www.gat24.de/data.php?rubrik=aktuell&unterrubrik=neues&dokument=neues&SID=0"
