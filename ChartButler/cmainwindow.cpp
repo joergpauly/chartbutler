@@ -33,13 +33,15 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui(new Ui::CMainWindow)
 {
     ui->setupUi(this);
+    m_AmendedFields = new QList<QString>();
+    m_AmendedCharts = new QList<QString>();
     mdb = new CDatabaseManager(this);
     mnet = new CNetworkManager(this);
     mopt = new COptions(this);        
     setupMenu();
     SetupTree();
     m_settings = mopt->settings();
-    m_AmendedFields = new QList<QString>();
+
     if(!checkRegistered())
     {
         //Registrierungsmaske aufrufen.
@@ -121,6 +123,7 @@ void CMainWindow::contextMenuEvent(QContextMenuEvent *e)
 
 QList<QString*> *CMainWindow::parseFields(QString pICAO)
 {
+    pICAO.append(" ");
     QList<QString*> *lList = new QList<QString*>();
     int cnt = 0;
     QString *lChr = new QString();
@@ -213,6 +216,13 @@ void CMainWindow::SetupTree()
             chld->setText(1, crt->Date.toString("dd.MM.yyyy"));
             chld->setData(0, Qt::UserRole, crt->Path);
             chld->setData(1, Qt::UserRole, crt->Date);
+            if(m_AmendedCharts->contains(crt->Name))
+            {
+                QFont fnt = chld->font(0);
+                fnt.setBold(true);
+                fnt.setItalic(true);
+                chld->setFont(1, fnt);
+            }
             item->addChild(chld);
         }while(mdb->NextChart());
 
@@ -224,6 +234,7 @@ void CMainWindow::SetupTree()
     lheaders.append("Plätze/Karten");
     lheaders.append("Stand vom");
     ui->trvCharts->setHeaderLabels(lheaders);
+    markAmmendedFields();
 }
 
 void CMainWindow::updateField(QString *pICAO)
@@ -232,8 +243,7 @@ void CMainWindow::updateField(QString *pICAO)
     QString lICAO(*pICAO);
     mdb->GetField(lICAO,lfld);
     ui->trvCharts->setCurrentItem(0);
-    mdb->RemoveField(&lfld->IACO);
-    //mnet->getChart(&lICAO);
+    mdb->RemoveField(&lfld->IACO);    
     SetupTree();
 }
 
@@ -243,20 +253,30 @@ void CMainWindow::nextField()
 }
 
 void CMainWindow::markAmmendedFields()
-{
-    for(int i=0; i< m_AmendedFields->count(); i++)
+{        
+    int i;
+    for(i=0; i< m_AmendedFields->count(); i++)
     {
         QTreeWidgetItem* item = ui->trvCharts->findItems(m_AmendedFields->at(i).toUtf8(),Qt::MatchStartsWith,0).at(0);
         QFont fnt = item->font(0);
         fnt.setBold(true);
         fnt.setItalic(true);
         item->setFont(0, fnt);
-    }
+        ui->trvCharts->expandItem(item);
+    }    
 }
 
 void CMainWindow::on_cmdUpdate_clicked()
 {
     //Vorhandene Karten auf Aktualisierung prüfen
+    QList<QString*> *lFields = new QList<QString*>();
+    mdb->BrowseFields();
+    do
+    {
+        lFields->append(&mdb->GetActualField()->IACO);
+    }
+    while(mdb->NextField());
+    mnet->getNewAirfields(lFields);
 }
 
 void CMainWindow::on_trvCharts_itemDoubleClicked(QTreeWidgetItem *item, int column)

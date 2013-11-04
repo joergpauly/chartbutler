@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     chelp.cpp \
     cregister.cpp \
     cnetworkmanager.cpp \
-    cparser.cpp
+    cparser.cpp \
+    cprogress.cpp
 
 
 HEADERS  += cmainwindow.h \
@@ -31,14 +32,16 @@ HEADERS  += cmainwindow.h \
     chelp.h \
     cregister.h \
     cnetworkmanager.h \
-    cparser.h
+    cparser.h \
+    cprogress.h
 
 
 FORMS    += cmainwindow.ui \
     coptions.ui \
     cstatus.ui \
     chelp.ui \
-    cregister.ui
+    cregister.ui \
+    cprogress.ui
 
 RESOURCES += \
     cbRessources.qrc

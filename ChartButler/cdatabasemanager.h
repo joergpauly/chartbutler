@@ -98,7 +98,7 @@ public:
     bool LastField();
     bool NextField();
     bool PrevField();
-    void AddChart(int FID, QString Name, QString Path, QDate Date);
+    bool AddChart(int FID, QString Name, QString Path, QDate Date);
     bool BrowseCharts(int FID);
     s_Chart* GetActualChart();
     bool NextChart();

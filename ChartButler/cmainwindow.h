@@ -81,6 +81,7 @@ private:
 // Public Member
 public:
     QList<QString>* m_AmendedFields;
+    QList<QString>* m_AmendedCharts;
     CDatabaseManager *GetDBman();
     CNetworkManager *getNetworkMan();
     void SetupTree();

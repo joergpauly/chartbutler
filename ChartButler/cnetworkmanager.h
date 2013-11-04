@@ -38,6 +38,7 @@
 #include <QMessageBox>
 #include "cdatabasemanager.h"
 #include "cparser.h"
+#include "cprogress.h"
 
 
 #define ACT_NEW 0
@@ -58,10 +59,16 @@ private:
     QString *m_FieldName;
     QString m_FieldDir;
     int m_FID;
-    QList<QString*> *m_LinkList;
+    QList<QString*> *m_FieldList;
+    int m_FieldsToLoad;
+    int m_actualFieldToLoad;
+    QList<QString*> *m_ChartList;
+    int m_ChartsToLoad;
+    int m_actualChartToLoad;
     QNetworkAccessManager m_nam;
     QNetworkRequest m_request;
     CParser m_parser;
+    CProgress *m_progress;
     int m_ReplyType;
 
     enum ReplyType //WAS haben wir angefordert?
@@ -76,10 +83,13 @@ private:
     //Private Funktionen
     void getSID();
     void extractSID(QString *pStream);
-    void getChartsForNewField(QString *pIcao);
+    void getChartListForNewField();
+    void getChartsFromList();
     void getLinkList(QString *pStream);
     void getFieldName(QString *pStream);
+    void loadFromChartList(QString *pStream);
     void storeAirfieldInDB();
+    void storeSingleChart(QNetworkReply* pReply, QByteArray pStream);
 
 public:
     explicit CNetworkManager(QObject *parent = 0);
@@ -87,6 +97,13 @@ public:
 
 private slots:
     void downloadFinished(QNetworkReply *pReply);
+    void downloadNextField();
+    void downloadNextChart();
+
+signals:
+    void fieldDownloadFinished();
+    void chartDownloadFinished();
+
 };
 
 #endif // CNETWORKMANAGER_H

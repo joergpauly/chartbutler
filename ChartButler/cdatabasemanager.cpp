@@ -191,9 +191,10 @@ bool CDatabaseManager::PrevField()
     return qryFields->previous();
 }
 
-void CDatabaseManager::AddChart(int p_FID, QString p_name, QString p_path, QDate p_date)
+bool CDatabaseManager::AddChart(int p_FID, QString p_name, QString p_path, QDate p_date)
 {
     // Check if there's already a chart with that file name
+    bool NewFile = false;
     qryCharts = new QSqlQuery(m_db);
     qryCharts->prepare("SELECT * FROM Charts WHERE CName = :CNAME");
     qryCharts->bindValue(":CNAME", p_name);
@@ -201,7 +202,12 @@ void CDatabaseManager::AddChart(int p_FID, QString p_name, QString p_path, QDate
     qryCharts->first();
     if(qryCharts->isValid())
     {
-        // We got it. Let's update it
+        // Chartfile ist schon hier; kommt ein neueres?
+        if(qryCharts->value(qryCharts->record().indexOf("Date")).toDate() < p_date)
+        {
+            NewFile = true;
+        }
+        // Updaten
         int Id = qryCharts->value("ID").toInt();
         qryCharts->prepare("UPDATE Charts SET Date = :CDATE WHERE ID = :ID");
         qryCharts->bindValue(":CDATE",p_date);
@@ -209,7 +215,8 @@ void CDatabaseManager::AddChart(int p_FID, QString p_name, QString p_path, QDate
     }
     else
     {
-        // It's a new one, so add it.
+        // Neue Datei: Flag setzen und speichern.
+        NewFile = true;
         qryCharts->prepare("INSERT INTO Charts (FID, CName, CPath, Date) VALUES (:FID, :CNAME, :CPATH, :CDATE)");
         qryCharts->bindValue(":FID", p_FID);
         qryCharts->bindValue(":CNAME", p_name);
@@ -217,6 +224,7 @@ void CDatabaseManager::AddChart(int p_FID, QString p_name, QString p_path, QDate
         qryCharts->bindValue(":CDATE", p_date);
     }
     qryCharts->exec();
+    return NewFile;
 }
 
 

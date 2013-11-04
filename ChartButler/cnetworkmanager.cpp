@@ -28,19 +28,24 @@
 #include "cnetworkmanager.h"
 #include "coptions.h"
 #include "cmainwindow.h"
+#include <QApplication>
 
 CNetworkManager::CNetworkManager(QObject *parent) : QObject(parent)
 {
     //"Parent" sichern
     m_parent = parent;
+    m_progress = new CProgress((QWidget*)parent);
     //Signal des QNetworkAccessManager fangen
     connect(&m_nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
+    //Eigene Download-Ende-Signale fangen
+    connect(this, SIGNAL(chartDownloadFinished()), this, SLOT(downloadNextChart()));
+    connect(this, SIGNAL(fieldDownloadFinished()), this, SLOT(downloadNextField()));
     //Login-Daten aus Settings holen
     QSettings l_opts(gCOMPANY, gAPP);
     m_uid = l_opts.value("UID").toString();
     m_pw = l_opts.value("PW").toString();
     //Einloggen, um SID zu bekommen
-    getSID();
+    getSID();    
 }
 
 void CNetworkManager::getSID()
@@ -63,31 +68,53 @@ void CNetworkManager::getSID()
  *  Die Anforderungen von CMainWindow landen hier!
  ****************************************************************************/
 
+/****************************************************************************
+ *  Hier wird die Ladesequenz in Gang gesetzt:
+ *  Die Liste der Plätze wird in ein Member geschrieben.
+ *  Die ermittelte Anzahl wird in ein Member geschrieben.
+ *  "Actual" wird auf das erste Listenelement, also 0, gesetzt.
+ *  Das Signal "fieldDownloadFinished()" wird geworfen.
+ *  Dessen Slot schaut nach, ob Actual < Anzahl ist.
+ *  Ja: Die Linklist und der Name werden geholt.
+ *  Die Linklist wird abgearbeitet (gleiches Prinzip),
+ *  nach der letzten Chart des Platzes wird der Zähler
+ *  inkrementiert und wieder das Signal geworfen.
+ *  Ist der letzte Platz komplett geladen, endet die
+ *  Kette.
+ *****************************************************************************/
+
 void CNetworkManager::getNewAirfields(QList<QString*> *pList)
-{
-    //Es sollen neue Flugplätze geladen werden.
-    for(int i = 0; i <= pList->count(); i++)
-    {
-        getChartsForNewField(pList->at(i));
-    }
+{    
+    m_FieldList = pList;
+    m_FieldsToLoad = m_FieldList->count();
+    m_actualFieldToLoad = 0;
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    m_progress->show();
+    downloadNextField();
 }
 
 /****************************************************************************
  *  Hilfsfunktionen für die CMainWindow-Anforderungen
  ****************************************************************************/
 
-void CNetworkManager::getChartsForNewField(QString *pIcao)
+void CNetworkManager::getChartListForNewField()
 {
-    //Für einen neu zu ladenden Platz wird die Chart-Linkliste geladen
-    m_ICAO = new QString(*pIcao);
+    //Für einen neu zu ladenden Platz wird die Chart-Linkliste geladen    
+    m_ICAO = new QString(*m_FieldList->at(m_actualFieldToLoad));
     QString lUrlString(ICAOURL);
-    lUrlString.append(pIcao);
+    lUrlString.append(m_ICAO);
     lUrlString.append("&SID=");
     lUrlString.append(m_sid);
     QUrl lUrl(lUrlString);
     m_request.setUrl(lUrl);
     m_ReplyType = AirfieldChartLinkList;
     m_nam.get(m_request);
+}
+
+void CNetworkManager::getChartsFromList()
+{
+    m_actualChartToLoad = 0;
+    emit chartDownloadFinished();
 }
 
 
@@ -98,23 +125,25 @@ void CNetworkManager::getChartsForNewField(QString *pIcao)
  ****************************************************************************/
 void CNetworkManager::downloadFinished(QNetworkReply *pReply)
 {
-    QString lStream(QString::fromLatin1(pReply->readAll()));
+    QByteArray lStream(pReply->readAll());
+    QString lStreamString(QString::fromLatin1(lStream));
     switch (m_ReplyType)
     {
     case LoginPage:
-        extractSID(&lStream);
+        extractSID(&lStreamString);
         break;
     case AirfieldChartLinkList:
-        getFieldName(&lStream);
-        getLinkList(&lStream);
-        //TODO: Datenbank nachführen.
-        storeAirfieldInDB();
-        //TODO: Charts nacheinander laden.
-
+        loadFromChartList(&lStreamString);
+        break;
+    case PDFdoc:
+        storeSingleChart(pReply, lStream);
+        break;
     default:
         break;
     }
 }
+
+
 
 /****************************************************************************
  *  Ab hier werden die Replies bearbeitet
@@ -138,9 +167,19 @@ void CNetworkManager::extractSID(QString *pStream)
     }
 }
 
+void CNetworkManager::loadFromChartList(QString *pStream)
+{
+    getFieldName(pStream);
+    getLinkList(pStream);
+    //Platz in Datenbank nachführen.
+    storeAirfieldInDB();
+    //Charts nacheinander laden.
+    getChartsFromList();
+}
+
 void CNetworkManager::getLinkList(QString *pStream)
 {
-    m_LinkList = new QList<QString*>();
+    m_ChartList = new QList<QString*>();
     int lpos = pStream->indexOf("pdfkarten.php?&icao=");
     if(lpos == -1)
     {
@@ -161,8 +200,11 @@ void CNetworkManager::getLinkList(QString *pStream)
         lhdr->append(chartBuf->text);
         lhdr->append("&SID=");
         lhdr->append(m_sid);
-        m_LinkList->append(lhdr);
+        m_ChartList->append(lhdr);
     }
+    m_ChartsToLoad = m_ChartList->count();
+    m_actualChartToLoad = 0;
+    emit chartDownloadFinished();
 }
 
 void CNetworkManager::getFieldName(QString *pStream)
@@ -181,6 +223,7 @@ void CNetworkManager::getFieldName(QString *pStream)
         QChar list(m_FieldName->at(i+1).toUpper().toLatin1());
         m_FieldName->replace(i+1,1,QString(list));
     }
+    m_progress->setFieldName(*m_FieldName);
 }
 
 void CNetworkManager::storeAirfieldInDB()
@@ -188,26 +231,96 @@ void CNetworkManager::storeAirfieldInDB()
     CMainWindow *lMain = (CMainWindow *)m_parent;
     CDatabaseManager *lDB = lMain->GetDBman();
     CDatabaseManager::s_Field *lField = new CDatabaseManager::s_Field();
-    if(lDB->GetField(*m_ICAO, lField))
+    if(!lDB->GetField(*m_ICAO, lField))
     {
-        //Der Platz ist vorhanden; er wird aktualisiert!
-        //Dazu wird er zunächst gelöscht.
-        lDB->RemoveField(m_ICAO);
-    }
-    QString lFullName(*m_ICAO);
-    lFullName.append(" - ");
-    lFullName.append(m_FieldName);
-
-    QSettings* settings = new QSettings(gCOMPANY, gAPP);
-    QString CPath(settings->value("ChartPath").toString());
-    QDir* lChartDir = new QDir(CPath);
-    lChartDir->mkdir(lFullName);
-    CPath.append("/");
-    CPath.append(lFullName);
-    lChartDir = new QDir(CPath);
-    CPath.append("/");
-    m_FieldDir = CPath;
-    m_FID = lDB->AddField(*m_ICAO, *m_FieldName, m_FieldDir);
+        QString lFullName(*m_ICAO);
+        lFullName.append(" - ");
+        lFullName.append(m_FieldName);
+        QSettings* settings = new QSettings(gCOMPANY, gAPP);
+        QString CPath(settings->value("ChartPath").toString());
+        QDir* lChartDir = new QDir(CPath);
+        lChartDir->mkdir(lFullName);
+        CPath.append("/");
+        CPath.append(lFullName);
+        lChartDir = new QDir(CPath);
+        CPath.append("/");
+        m_FieldDir = CPath;
+        m_FID = lDB->AddField(*m_ICAO, *m_FieldName, m_FieldDir);
+    }        
     lMain->SetupTree();
+}
 
+void CNetworkManager::storeSingleChart(QNetworkReply *pReply, QByteArray pStream)
+{
+    QString lAtt(pReply->rawHeader("Content-Disposition"));
+    QString lLim("\"");
+    QString lFilename(m_parser.getTextBetween(&lAtt,&lLim,&lLim,0)->text);
+    m_progress->setFileName(lFilename);
+    QString lrawDate(pReply->rawHeader("Last-Modified"));
+    QString lChartPath(m_FieldDir);
+    if(lChartPath.right(1) != "/")
+    {
+        lChartPath.append("/");
+    }
+    lChartPath.append(lFilename);
+    QFile* lChartFile = new QFile();
+    lChartFile->setFileName(lChartPath);
+    lChartFile->open(QFile::WriteOnly);
+    lChartFile->write(pStream);
+    lChartFile->flush();
+    lChartFile->close();
+    QDate *lcfDate = m_parser.fromHTMLDate(lrawDate);
+    CMainWindow *lmain = (CMainWindow*)m_parent;
+    CDatabaseManager* lDB = lmain->GetDBman();
+    if(lDB->AddChart(m_FID,lFilename,lChartPath,*lcfDate) == true)
+    {
+        //Neue Karte; markieren!
+        lmain->m_AmendedFields->append(*m_ICAO);
+        lmain->m_AmendedCharts->append(lFilename);
+    }
+    lmain->SetupTree();
+    if(m_actualChartToLoad < m_ChartsToLoad)
+    {
+        m_actualChartToLoad++;
+        emit chartDownloadFinished();
+    }
+    else
+    {
+        m_progress->setFileName("");
+        m_actualFieldToLoad++;
+        emit fieldDownloadFinished();
+    }
+}
+
+/********************************************************************************
+ *  Slots für die Ladesequenzen.
+ ********************************************************************************/
+
+void CNetworkManager::downloadNextField()
+{
+    if(m_actualFieldToLoad < m_FieldsToLoad)
+    {
+        m_progress->setFields(m_FieldsToLoad);
+        m_progress->setActualFields(m_actualFieldToLoad);
+        m_ReplyType = AirfieldChartLinkList;
+        getChartListForNewField();
+    }
+    else
+    {
+        m_progress->close();
+        QApplication::restoreOverrideCursor();
+    }
+}
+
+void CNetworkManager::downloadNextChart()
+{
+    if(m_actualChartToLoad < m_ChartsToLoad)
+    {
+        m_progress->setFiles(m_ChartsToLoad);
+        m_progress->setActualFiles(m_actualChartToLoad);
+        QUrl *lUrl = new QUrl(*m_ChartList->at(m_actualChartToLoad));
+        m_request.setUrl(*lUrl);
+        m_ReplyType = PDFdoc;
+        m_nam.get(m_request);
+    }
 }
