@@ -223,28 +223,35 @@ void CNetworkManager::getFieldName(QString *pStream)
         QChar list(m_FieldName->at(i+1).toUpper().toLatin1());
         m_FieldName->replace(i+1,1,QString(list));
     }
+    i = m_FieldName->indexOf(" ");
+    if(i != -1)
+    {
+        QChar list(m_FieldName->at(i+1).toUpper().toLatin1());
+        m_FieldName->replace(i+1,1,QString(list));
+    }
     m_progress->setFieldName(*m_FieldName);
 }
 
 void CNetworkManager::storeAirfieldInDB()
 {
     CMainWindow *lMain = (CMainWindow *)m_parent;
+    QString lFullName(*m_ICAO);
+    lFullName.append(" - ");
+    lFullName.append(m_FieldName);
+    QSettings* settings = new QSettings(gCOMPANY, gAPP);
+    QString CPath(settings->value("ChartPath").toString());
+    QDir* lChartDir = new QDir(CPath);
+    lChartDir->mkdir(lFullName);
+    CPath.append("/");
+    CPath.append(lFullName);
+    lChartDir = new QDir(CPath);
+    CPath.append("/");
+    m_FieldDir = CPath;
+
     CDatabaseManager *lDB = lMain->GetDBman();
     CDatabaseManager::s_Field *lField = new CDatabaseManager::s_Field();
     if(!lDB->GetField(*m_ICAO, lField))
     {
-        QString lFullName(*m_ICAO);
-        lFullName.append(" - ");
-        lFullName.append(m_FieldName);
-        QSettings* settings = new QSettings(gCOMPANY, gAPP);
-        QString CPath(settings->value("ChartPath").toString());
-        QDir* lChartDir = new QDir(CPath);
-        lChartDir->mkdir(lFullName);
-        CPath.append("/");
-        CPath.append(lFullName);
-        lChartDir = new QDir(CPath);
-        CPath.append("/");
-        m_FieldDir = CPath;
         m_FID = lDB->AddField(*m_ICAO, *m_FieldName, m_FieldDir);
     }        
     lMain->SetupTree();
@@ -264,7 +271,7 @@ void CNetworkManager::storeSingleChart(QNetworkReply *pReply, QByteArray pStream
     }
     lChartPath.append(lFilename);
     QFile* lChartFile = new QFile();
-    lChartFile->setFileName(lChartPath);
+    lChartFile->setFileName(lChartPath);       
     lChartFile->open(QFile::WriteOnly);
     lChartFile->write(pStream);
     lChartFile->flush();
