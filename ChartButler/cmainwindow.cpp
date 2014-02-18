@@ -320,7 +320,8 @@ void CMainWindow::on_actRemove()
     lBox->setDefaultButton(QMessageBox::No);
     if(lBox->exec() == QMessageBox::Yes)
     {
-        ui->trvCharts->setCurrentItem(0);
+        ui->trvCharts->setCurrentItem(0);        
+        //ui->trvCharts->currentItem()->setExpanded(false);
         mdb->RemoveField(&lfld->IACO);
         SetupTree();
     }

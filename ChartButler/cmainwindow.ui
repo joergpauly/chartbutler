@@ -174,7 +174,7 @@
       <item>
        <widget class="QPushButton" name="cmdClose">
         <property name="toolTip">
-         <string>ChartButler beenden und Fenster schließen.</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ChartButler beenden und Fenster schließen.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Schließen</string>
@@ -191,7 +191,7 @@
      <x>0</x>
      <y>0</y>
      <width>604</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>
