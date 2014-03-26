@@ -138,6 +138,8 @@ void CNetworkManager::downloadFinished(QNetworkReply *pReply)
     case PDFdoc:
         storeSingleChart(pReply, lStream);
         break;
+    case UpdDate:
+        //TODO: Datum extrahieren und sichern
     default:
         break;
     }
@@ -299,10 +301,15 @@ void CNetworkManager::storeSingleChart(QNetworkReply *pReply, QByteArray pStream
     }
 }
 
-bool CNetworkManager::checkUpdateDateOnServer()
+void CNetworkManager::checkUpdateDateOnServer()
 {
     //TODO: Datum der neu vorliegenden Updates mit dem letzten Update-Datum abgleichen.
-
+    QString lurl = UPDATEURLLEAD;
+    lurl.append(m_sid);
+    lurl.append(UPDATEURLTAIL);
+    m_ReplyType = UpdDate;
+    m_request.setUrl(lurl);
+    m_nam.get(m_request);
 }
 
 /********************************************************************************

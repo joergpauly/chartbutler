@@ -77,7 +77,8 @@ private:
         SidReply,
         AirfieldChartLinkList,
         PDFdoc,
-        AppVersion
+        AppVersion,
+        UpdDate
     };
 
     //Private Funktionen
@@ -90,7 +91,7 @@ private:
     void loadFromChartList(QString *pStream);
     void storeAirfieldInDB();
     void storeSingleChart(QNetworkReply* pReply, QByteArray pStream);
-    bool checkUpdateDateOnServer();
+    void checkUpdateDateOnServer();
 
 public:
     explicit CNetworkManager(QObject *parent = 0);
