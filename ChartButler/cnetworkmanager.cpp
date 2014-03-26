@@ -299,6 +299,12 @@ void CNetworkManager::storeSingleChart(QNetworkReply *pReply, QByteArray pStream
     }
 }
 
+bool CNetworkManager::checkUpdateDateOnServer()
+{
+    //TODO: Datum der neu vorliegenden Updates mit dem letzten Update-Datum abgleichen.
+
+}
+
 /********************************************************************************
  *  Slots für die Ladesequenzen.
  ********************************************************************************/

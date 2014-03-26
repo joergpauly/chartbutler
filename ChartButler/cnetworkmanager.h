@@ -90,6 +90,7 @@ private:
     void loadFromChartList(QString *pStream);
     void storeAirfieldInDB();
     void storeSingleChart(QNetworkReply* pReply, QByteArray pStream);
+    bool checkUpdateDateOnServer();
 
 public:
     explicit CNetworkManager(QObject *parent = 0);
