@@ -1,0 +1,1 @@
+Get VFR charts from gat24.de and maintain them actual.
