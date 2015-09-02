@@ -36,6 +36,11 @@ CParser::txtPos* CParser::getTextBetween(QString* pSource, QString* pStart, QStr
         return lps;
     }
     int lEnd = pSource->indexOf(*pEnd,lStart);
+    if(lEnd < lStart)
+    {
+        lps->pos = -1;
+        return lps;
+    }
     if(lEnd == -1)
     {
         lps->pos = -1;

@@ -181,6 +181,7 @@ void CNetworkManager::loadFromChartList(QString *pStream)
 
 void CNetworkManager::getLinkList(QString *pStream)
 {
+    m_ChartsToLoad = 0;
     m_ChartList = new QList<QString*>();
     int lpos = pStream->indexOf("pdfkarten.php?&icao=");
     if(lpos == -1)
@@ -188,16 +189,23 @@ void CNetworkManager::getLinkList(QString *pStream)
         return;
     }
     int fstlpos = lpos;
+    int lastPos = 0;
+
     while(lpos >= fstlpos)
     {
         QString lStart("pdfkarten.php?&icao=");
-        QString lEnd("==&SID");
+        QString lEnd("&SID=");
         CParser::txtPos* chartBuf = m_parser.getTextBetween(pStream, &lStart, &lEnd, lpos);
         lpos = chartBuf->pos;
+        if(lpos < lastPos)
+        {
+            break;
+        }
         if(chartBuf->text.contains("W3C"))
         {
             break;
         }
+        lastPos = lpos;
         QString *lhdr =new QString("https://www.gat24.de/dokumente/briefing/flugplaetze/pdfkarten.php?&icao=");
         lhdr->append(chartBuf->text);
         lhdr->append("&SID=");
@@ -301,16 +309,6 @@ void CNetworkManager::storeSingleChart(QNetworkReply *pReply, QByteArray pStream
     }
 }
 
-void CNetworkManager::checkUpdateDateOnServer()
-{
-    //TODO: Datum der neu vorliegenden Updates mit dem letzten Update-Datum abgleichen.
-    QString lurl = UPDATEURLLEAD;
-    lurl.append(m_sid);
-    lurl.append(UPDATEURLTAIL);
-    m_ReplyType = UpdDate;
-    m_request.setUrl(lurl);
-    m_nam.get(m_request);
-}
 
 /********************************************************************************
  *  Slots für die Ladesequenzen.
