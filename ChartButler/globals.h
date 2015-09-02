@@ -38,7 +38,7 @@
 #define REV   96
 
 // Server-URLs
-#define LOGINURL "http://www.gat24.de/data.php?rubrik=aktuell&unterrubrik=neues&dokument=neues&SID=0"
+#define LOGINURL "http://www.gat24.de/data.php"
 #define ICAOURL "http://www.gat24.de/data.php?rubrik=briefing&unterrubrik=flugplaetze&dokument=karten&ICAO="
 #define UPDATEURLLEAD "http://www.gat24.de/data.php?rubrik=aktuell&unterrubrik=neues&dokument=aip_aktuell&SID="
 #define UPDATEURLTAIL "&printable=true"
