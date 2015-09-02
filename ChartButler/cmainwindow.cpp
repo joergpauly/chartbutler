@@ -35,6 +35,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->setupUi(this);
     m_AmendedFields = new QList<QString>();
     m_AmendedCharts = new QList<QString>();
+    ui->cmdAdd->setEnabled(false);
+    ui->cmdUpdate->setEnabled(false);
     mdb = new CDatabaseManager(this);
     mnet = new CNetworkManager(this);
     mopt = new COptions(this);        
@@ -186,6 +188,12 @@ CDatabaseManager* CMainWindow::GetDBman()
 CNetworkManager *CMainWindow::getNetworkMan()
 {
     return mnet;
+}
+
+void CMainWindow::ActivateButtons()
+{
+    ui->cmdAdd->setEnabled(true);
+    ui->cmdUpdate->setEnabled(true);
 }
 
 void CMainWindow::SetupTree()

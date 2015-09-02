@@ -61,7 +61,6 @@ void CNetworkManager::getSID()
     m_request.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
     m_ReplyType = LoginPage;
     m_nam.post(m_request,lLogin.toLatin1());
-
 }
 
 /****************************************************************************
@@ -153,8 +152,8 @@ void CNetworkManager::downloadFinished(QNetworkReply *pReply)
 
 void CNetworkManager::extractSID(QString *pStream)
 {
-    QString lStart("mitgliedsdaten&SID=");
-    QString lEnd("\">Mitglied");
+    QString lStart("data.php?SID=");
+    QString lEnd("&Logout");
     m_sid = m_parser.getTextBetween(pStream, &lStart, &lEnd, 0)->text;
     CMainWindow* lparent = (CMainWindow*) m_parent;
     if(m_sid == "0")
@@ -167,6 +166,7 @@ void CNetworkManager::extractSID(QString *pStream)
         dlgLogin->setWindowTitle("Authorisierungs-Fehler!");
         dlgLogin->exec();
     }
+    lparent->ActivateButtons();
 }
 
 void CNetworkManager::loadFromChartList(QString *pStream)
@@ -191,14 +191,14 @@ void CNetworkManager::getLinkList(QString *pStream)
     while(lpos >= fstlpos)
     {
         QString lStart("pdfkarten.php?&icao=");
-        QString lEnd("&");
+        QString lEnd("==&SID");
         CParser::txtPos* chartBuf = m_parser.getTextBetween(pStream, &lStart, &lEnd, lpos);
         lpos = chartBuf->pos;
         if(chartBuf->text.contains("W3C"))
         {
             break;
         }
-        QString *lhdr =new QString("http://www.gat24.de/dokumente/briefing/flugplaetze/pdfkarten.php?&icao=");
+        QString *lhdr =new QString("https://www.gat24.de/dokumente/briefing/flugplaetze/pdfkarten.php?&icao=");
         lhdr->append(chartBuf->text);
         lhdr->append("&SID=");
         lhdr->append(m_sid);

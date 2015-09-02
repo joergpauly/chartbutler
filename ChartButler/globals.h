@@ -35,12 +35,12 @@
 // Version
 #define MAJOR 2
 #define MINOR 2
-#define REV   96
+#define REV   128
 
 // Server-URLs
-#define LOGINURL "http://www.gat24.de/data.php"
-#define ICAOURL "http://www.gat24.de/data.php?rubrik=briefing&unterrubrik=flugplaetze&dokument=karten&ICAO="
-#define UPDATEURLLEAD "http://www.gat24.de/data.php?rubrik=aktuell&unterrubrik=neues&dokument=aip_aktuell&SID="
+#define LOGINURL "https://www.gat24.de/data.php"
+#define ICAOURL "https://www.gat24.de/data.php?rubrik=briefing&unterrubrik=flugplaetze&dokument=karten&ICAO="
+#define UPDATEURLLEAD "https://www.gat24.de/data.php?rubrik=aktuell&unterrubrik=neues&dokument=aip_aktuell&SID="
 #define UPDATEURLTAIL "&printable=true"
 
 #endif // GLOBALS_H

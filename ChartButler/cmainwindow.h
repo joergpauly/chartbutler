@@ -84,6 +84,7 @@ public:
     QList<QString>* m_AmendedCharts;
     CDatabaseManager *GetDBman();
     CNetworkManager *getNetworkMan();
+    void ActivateButtons();
     void SetupTree();
     void updateField(QString* pICAO);
     void nextField();
