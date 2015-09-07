@@ -172,6 +172,18 @@ void CNetworkManager::extractSID(QString *pStream)
 void CNetworkManager::loadFromChartList(QString *pStream)
 {
     getFieldName(pStream);
+    if(m_FieldName->left(7) == "Invalid")
+    {
+        m_progress->close();
+        QApplication::restoreOverrideCursor();
+        QMessageBox dlg;
+        dlg.setWindowTitle("Platz nicht gefunden");
+        dlg.setText("Keine Karten gefunden!");
+        dlg.setStandardButtons(QMessageBox::Ok);
+        dlg.setIcon(QMessageBox::Information);
+        dlg.exec();
+        return;
+    }
     getLinkList(pStream);
     //Platz in Datenbank nachführen.
     storeAirfieldInDB();
@@ -180,7 +192,7 @@ void CNetworkManager::loadFromChartList(QString *pStream)
 }
 
 void CNetworkManager::getLinkList(QString *pStream)
-{
+{    
     m_ChartsToLoad = 0;
     m_ChartList = new QList<QString*>();
     int lpos = pStream->indexOf("pdfkarten.php?&icao=");
@@ -218,27 +230,39 @@ void CNetworkManager::getLinkList(QString *pStream)
 }
 
 void CNetworkManager::getFieldName(QString *pStream)
-{
-    QString lStart("style=\"width:300px\">");
-    QString lEnd("</td>");
+{    
+
     m_FieldName = new QString();
+    QString lStart = "style=\"width:300px\">";
+    QString lEnd = "</td>";
+
+    if(pStream->indexOf("boxerr") != -1)
+    {
+        *m_FieldName = "Invalid";
+        return;
+    }
+
     *m_FieldName = m_parser.getTextBetween(pStream, &lStart, &lEnd, 0)->text;
     m_FieldName->replace(m_FieldName->indexOf("/"),1,"-");
     *m_FieldName = m_FieldName->toLower();
     QChar lfst(m_FieldName->at(0).toUpper().toLatin1());
     m_FieldName->replace(0,1,QString(lfst));
     int i = m_FieldName->indexOf("-");
+
     if(i != -1)
     {
         QChar list(m_FieldName->at(i+1).toUpper().toLatin1());
         m_FieldName->replace(i+1,1,QString(list));
     }
+
     i = m_FieldName->indexOf(" ");
+
     if(i != -1)
     {
         QChar list(m_FieldName->at(i+1).toUpper().toLatin1());
         m_FieldName->replace(i+1,1,QString(list));
     }
+
     m_progress->setFieldName(*m_FieldName);
 }
 
