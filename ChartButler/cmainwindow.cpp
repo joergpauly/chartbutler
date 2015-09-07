@@ -42,7 +42,21 @@ CMainWindow::CMainWindow(QWidget *parent) :
     mopt = new COptions(this);        
     setupMenu();
     SetupTree();
-    m_settings = mopt->settings();
+    m_settings = mopt->settings();    
+    m_ChartPath = m_settings->value("ChartPath").toString();
+    m_UID = m_settings->value("UID").toString();
+    m_PW = m_settings->value("PW").toString();
+    m_PDFexe = m_settings->value("PDFexe").toString();
+
+    if(m_settings->value("UID").toString() == "")
+    {
+        on_cmdOptions_clicked();
+    }
+
+    if(m_settings->value("ChartPath").toString() == "")
+    {
+        on_cmdOptions_clicked();
+    }
 
     if(!checkRegistered())
     {

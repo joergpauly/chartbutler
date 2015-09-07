@@ -68,6 +68,10 @@ private:
     CDatabaseManager *mdb;
     CNetworkManager *mnet;
     COptions *mopt;    
+    QString m_ChartPath;
+    QString m_UID;
+    QString m_PW;
+    QString m_PDFexe;
     QMouseEvent* m_lastMouseEvent;
     QMenu *m_contextMenu;
     QAction *m_actRemove;
