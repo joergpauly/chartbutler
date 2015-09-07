@@ -77,8 +77,7 @@ private:
         SidReply,
         AirfieldChartLinkList,
         PDFdoc,
-        AppVersion,
-        UpdDate
+        AppVersion
     };
 
     //Private Funktionen

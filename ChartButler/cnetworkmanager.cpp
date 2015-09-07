@@ -123,8 +123,7 @@ void CNetworkManager::getChartsFromList()
  *  Es wird anhand des Requests sortiert
  ****************************************************************************/
 void CNetworkManager::downloadFinished(QNetworkReply *pReply)
-{
-    //FIXME: Wieso ist der Stream leer???
+{    
     QByteArray lStream(pReply->readAll());
     QString lStreamString(QString::fromLatin1(lStream));
     switch (m_ReplyType)
@@ -137,9 +136,7 @@ void CNetworkManager::downloadFinished(QNetworkReply *pReply)
         break;
     case PDFdoc:
         storeSingleChart(pReply, lStream);
-        break;
-    case UpdDate:
-        //TODO: Datum extrahieren und sichern
+        break;    
     default:
         break;
     }
