@@ -124,6 +124,7 @@ void CNetworkManager::getChartsFromList()
  ****************************************************************************/
 void CNetworkManager::downloadFinished(QNetworkReply *pReply)
 {
+    //FIXME: Wieso ist der Stream leer???
     QByteArray lStream(pReply->readAll());
     QString lStreamString(QString::fromLatin1(lStream));
     switch (m_ReplyType)
@@ -151,7 +152,7 @@ void CNetworkManager::downloadFinished(QNetworkReply *pReply)
  ****************************************************************************/
 
 void CNetworkManager::extractSID(QString *pStream)
-{
+{   
     QString lStart("data.php?SID=");
     QString lEnd("&Logout");
     m_sid = m_parser.getTextBetween(pStream, &lStart, &lEnd, 0)->text;
