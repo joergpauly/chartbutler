@@ -51,6 +51,11 @@ COptions::COptions(QWidget *parent) :
     // Set up the GUI...
     ui->setupUi(this);
 
+    // On Linux male "PDF-Viewer" invisible
+    #ifdef Q_OS_LINUX
+        ui->groupBox_3->setVisible(false);
+    #endif
+
     // ...and feed it!
     ui->txtChartPath->setText(m_settings->value("ChartPath").toString());
     ui->txtUserName->setText(m_settings->value("UID").toString());
