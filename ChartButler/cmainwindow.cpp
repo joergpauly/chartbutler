@@ -53,6 +53,11 @@ CMainWindow::CMainWindow(QWidget *parent) :
         on_cmdOptions_clicked();
     }
 
+    if(m_settings->value("ActOS").toBool())
+    {
+        on_cmdUpdate_clicked();
+    }
+
     if(m_settings->value("ChartPath").toString() == "")
     {
         on_cmdOptions_clicked();

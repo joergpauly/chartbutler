@@ -58,6 +58,7 @@ COptions::COptions(QWidget *parent) :
 
     // ...and feed it!
     ui->txtChartPath->setText(m_settings->value("ChartPath").toString());
+    ui->cbxActualizeOnStartup->setChecked(m_settings->value("ActOS").toBool());
     ui->txtUserName->setText(m_settings->value("UID").toString());
     ui->txtPassword->setText(m_settings->value("PW").toString());
     ui->txtPdfExePath->setText(m_settings->value("PDFexe").toString());
@@ -86,6 +87,7 @@ void COptions::on_buttonBox_accepted()
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     // Write the value to the settings storage, where ever it is...
     m_settings->setValue("ChartPath", ui->txtChartPath->text());
+    m_settings->setValue("ActOS",ui->cbxActualizeOnStartup->isChecked());
     m_settings->setValue("UID", ui->txtUserName->text());
     m_settings->setValue("PW",ui->txtPassword->text());
     m_settings->setValue("PDFexe",ui->txtPdfExePath->text());
