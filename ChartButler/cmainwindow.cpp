@@ -51,12 +51,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     if(m_settings->value("UID").toString() == "")
     {
         on_cmdOptions_clicked();
-    }
-
-    if(m_settings->value("ActOS").toBool())
-    {
-        on_cmdUpdate_clicked();
-    }
+    }    
 
     if(m_settings->value("ChartPath").toString() == "")
     {
@@ -213,6 +208,11 @@ void CMainWindow::ActivateButtons()
 {
     ui->cmdAdd->setEnabled(true);
     ui->cmdUpdate->setEnabled(true);
+
+    if(m_settings->value("ActOS").toBool())
+    {
+        on_cmdUpdate_clicked();
+    }
 }
 
 void CMainWindow::SetupTree()
