@@ -20,14 +20,19 @@
 *****************************************************************************************/
 
 #include <QtWidgets/QApplication>
+#include <QIcon>
 #include "cmainwindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    CMainWindow w;
-    w.show();
     a.addLibraryPath(a.applicationDirPath());
+    a.setWindowIcon(QIcon("./cb.ico"));
+    a.setApplicationName("ChartButler");
+    a.setApplicationVersion("2.4.113");
+    a.setOrganizationName("MEGAMover.de");
+    CMainWindow w;
+    w.show();    
 
     return a.exec();
 }

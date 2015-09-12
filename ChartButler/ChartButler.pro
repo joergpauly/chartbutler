@@ -8,7 +8,7 @@ QT += core widgets sql network
 
 TARGET = ChartButler
 TEMPLATE = app
-VERSION = 2.1.72
+VERSION = 2.4.113
 
 SOURCES += main.cpp\
         cmainwindow.cpp \
